@@ -10,6 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_01_08_200845) do
+
+  create_table "champions", force: :cascade do |t|
+    t.string "name"
+    t.string "imagename"
+    t.string "image"
+    t.string "info"
+    t.string "partype"
+    t.string "tags"
+    t.string "title"
+    t.string "stats"
+  end
 
 end

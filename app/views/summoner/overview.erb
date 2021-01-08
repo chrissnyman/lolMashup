@@ -3,11 +3,46 @@
 <% end %>
 
 <%= content_for :content do %>
-    <%= @summoner_data %>
-    <hr>
-    <p>Found mastery for <%= @summoner_champ_masteries.count %> champions:
-    <% @summoner_champ_masteries.each do |champ_mast| %>
-        <%= champ_mast %>
-        <br>
-    <% end %>
+    <%= render 'shared/navbar' %>
+    <div class="container">
+        <div class="jumbotron">
+
+            <div class="row">
+                <div class="col-3">
+                    <img class="img-fluid" src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= @summoner_data["profileIconId"] %>.png">
+                </div>
+                <div class="col-9">
+                    <h3 class="display-3"><%= @summoner_data["name"] %></h3>
+                    <p class="lead"><strong>Level</strong> <%= @summoner_data["summonerLevel"] %></p>
+
+                </div>
+            </div>
+            <hr class="my-4">
+        </div>
+        <p>Found mastery for <%= @summoner_champ_masteries.count %> champions:
+        <div class="row masteries">
+
+        <% @summoner_champ_masteries.each do |champ_mast| %>
+            <div class="col-3">
+                <div class="card" >
+                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast[:imagename]%>" class="card-img-top " alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= champ_mast[:name] %></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Mastery Rank: <%= champ_mast[:championLevel] %></h6>
+                        <p class="card-text">
+                            <h5>Champion Points</h5>
+                            <small class='mastery-stat-item'><strong>Total:</strong> <%= champ_mast[:championPoints] %></small>
+                            <small class='mastery-stat-item'><strong>Since Last Level:</strong> <%= champ_mast[:championPointsSinceLastLevel] %></small>
+                            <small class='mastery-stat-item'><strong>Until Next Level:</strong> <%= champ_mast[:championPointsUntilNextLevel] %></small>
+                            <hr>
+                            <small class='mastery-stat-item'><strong>Chest Granted:</strong> <%= champ_mast[:chestGranted] %></small>
+                            <small class='mastery-stat-item'><strong>Tokens Earned:</strong> <%= champ_mast[:tokensEarned] %></small>
+                            <hr>
+                            <small class='mastery-stat-item'><strong>Last Play Time:</strong> <%= champ_mast[:lastPlayTime].strftime("%e %b %Y") %></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
 <% end %>

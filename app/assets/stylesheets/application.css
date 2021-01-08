@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+ .masteries .card {
+    margin-bottom: 16px;
+ }
+
+.mastery-stat-item {
+    display: block;
+}
