@@ -1,0 +1,80 @@
+
+require 'httparty'
+
+module Riot
+    class ApiClient
+        
+		def initialize
+        end
+
+        def get_summoner_data(region,summoner_name)
+            endpoint = "https://#{api_url(region)}/lol/summoner/v4/summoners/by-name/#{summoner_name}"
+
+            perform_call(endpoint,'get')
+        end
+
+        def get_summoner_champ_masteries(region,encryptedSummonerId)
+            endpoint = "https://#{api_url(region)}/lol/champion-mastery/v4/champion-masteries/by-summoner/#{encryptedSummonerId}"
+
+            perform_call(endpoint,'get')
+        end
+        
+        private
+            def api_url_list
+                {
+                    'BR1'   =>  'br1.api.riotgames.com',
+                    'EUN1'  =>  'eun1.api.riotgames.com',
+                    'EUW1'  =>  'euw1.api.riotgames.com',
+                    'JP1'   =>  'jp1.api.riotgames.com',
+                    'KR'    =>  'kr.api.riotgames.com',
+                    'LA1'   =>  'la1.api.riotgames.com',
+                    'LA2'   =>  'la2.api.riotgames.com',
+                    'NA1'   =>  'na1.api.riotgames.com',
+                    'OC1'   =>  'oc1.api.riotgames.com',
+                    'TR1'   =>  'tr1.api.riotgames.com',
+                    'RU'    =>  'ru.api.riotgames.com',
+                }
+            end
+
+            def api_url(region)
+                api_url_list[region]
+            end
+
+            def perform_call(endpoint,call_type,get_data = {}, post_data = {})
+                cur_url = "#{endpoint}?api_key=#{ENV['RIOT_API_KEY']}"
+
+                get_data.each do |key,val|
+                    cur_url +=  "&#{key}=#{val}"
+                end
+                puts "perform_call #{call_type}: #{cur_url}"
+
+                response = false
+                if call_type.downcase == 'post'
+                    response = HTTParty.post(cur_url,
+                        :body => post_data.to_json,
+                        :headers => { 
+                            'Content-Type' => 'application/json'
+                            # 'Authorization' => 'Basic '+sage_authcode,
+                        }
+                    )
+                elsif call_type.downcase == 'get'
+                    response = HTTParty.get(cur_url,
+                        :headers => { 
+                            'Content-Type' => 'application/json'
+                            # 'Authorization' => 'Basic '+sage_authcode,
+                        }
+                    )
+                end
+
+                if response == false 
+                    return false
+                end
+                if response.code == 200 or response.code == 201 or response.code == 204
+                    return response.parsed_response
+                else
+                    puts 'Unexpected response ', response.code, response.message
+                    return false
+                end
+            end
+    end
+end
