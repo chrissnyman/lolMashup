@@ -10,6 +10,6 @@ echo "Pushing to heroku"
 echo "-------------------------"
 git push heroku
 echo " push completed, running db migrate"
-heroku run rake db:migrate -a do-passport
+heroku run rake db:migrate -a lol-mashup
 echo " db migrate completed."            
 echo "-------------------------"
