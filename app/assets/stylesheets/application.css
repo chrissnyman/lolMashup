@@ -13,11 +13,15 @@
  *= require_tree .
  *= require_self
  */
-
- .masteries .card {
-    margin-bottom: 16px;
- }
-
-.mastery-stat-item {
-    display: block;
+.masteries .table thead th {
+    text-align: center;
+    vertical-align: middle;
 }
+
+ .masteries .champ-pp {
+   width: 30px
+ }
+ .masteries .champ-name {
+     padding-left: 8px;
+ }
+ 

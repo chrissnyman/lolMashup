@@ -1,5 +1,7 @@
 <%= content_for :head do %>
     <title><%= @summoner_name%> | LoL Mashup</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <% end %>
 
 <%= content_for :content do %>
@@ -22,27 +24,45 @@
         <p>Found mastery for <%= @summoner_champ_masteries.count %> champions:
         <div class="row masteries">
 
-        <% @summoner_champ_masteries.each do |champ_mast| %>
-            <div class="col-3">
-                <div class="card" >
-                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast[:imagename]%>" class="card-img-top " alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= champ_mast[:name] %></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Mastery Rank: <%= champ_mast[:championLevel] %></h6>
-                        <p class="card-text">
-                            <h5>Champion Points</h5>
-                            <small class='mastery-stat-item'><strong>Total:</strong> <%= champ_mast[:championPoints] %></small>
-                            <small class='mastery-stat-item'><strong>Since Last Level:</strong> <%= champ_mast[:championPointsSinceLastLevel] %></small>
-                            <small class='mastery-stat-item'><strong>Until Next Level:</strong> <%= champ_mast[:championPointsUntilNextLevel] %></small>
-                            <hr>
-                            <small class='mastery-stat-item'><strong>Chest Granted:</strong> <%= champ_mast[:chestGranted] %></small>
-                            <small class='mastery-stat-item'><strong>Tokens Earned:</strong> <%= champ_mast[:tokensEarned] %></small>
-                            <hr>
-                            <small class='mastery-stat-item'><strong>Last Play Time:</strong> <%= champ_mast[:lastPlayTime].strftime("%e %b %Y") %></small>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        <% end %>
+        <table class='table table-hover table-bordered datatable'>
+            <thead>
+                <tr>
+                    <th rowspan="2">Champion</th>
+                    <th rowspan="2">Mastery Level</th>
+                    <th colspan="3">Mastery Points</th>
+                    <th rowspan="2">Chest Granted</th>
+                    <th rowspan="2">Tokens Earned</th>
+                    <th rowspan="2">Last Play Time</th>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>Since Last Level</th>
+                    <th>Until Next Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @summoner_champ_masteries.each do |champ_mast| %>
+                    <tr>
+                        <td><img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast[:imagename]%>" class="champ-pp "><span class='champ-name'><%= champ_mast[:name] %></span></td>
+                        <td class='text-center'><%= champ_mast[:championLevel] %></td>
+                        <td class='text-center'><%= champ_mast[:championPoints] %></td>
+                        <td class='text-center'><%= champ_mast[:championPointsSinceLastLevel] %></td>
+                        <td class='text-center'><%= champ_mast[:championPointsUntilNextLevel] %></td>
+                        <td class='text-center'><%= champ_mast[:chestGranted] %></td>
+                        <td class='text-center'><%= champ_mast[:tokensEarned] %></td>
+                        <td><%= champ_mast[:lastPlayTime].strftime("%Y-%m-%d") %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
     </div>
+    <script>
+        $( document ).ready(function() {
+            $('.datatable').dataTable({
+                "paging":   false,
+                "info":   false,
+                "order": [[ 1, "desc" ]],
+            });
+        });
+    </script>
 <% end %>
