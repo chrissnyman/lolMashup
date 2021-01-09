@@ -1,0 +1,13 @@
+
+<% if notice.present? %>
+  <div class="row mt-3">
+    <div class="col-3"></div>
+    <div class="col-6">
+      <div class="alert alert-dismissable alert-<%= notice["class"] %>">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <%= raw notice["message"] %>
+      </div>
+    </div>
+    <div class="col-3"></div>
+  </div>
+<% end %>

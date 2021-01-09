@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_08_200845) do
+ActiveRecord::Schema.define(version: 2021_01_09_034159) do
 
   create_table "champions", force: :cascade do |t|
     t.string "name"
@@ -21,6 +21,55 @@ ActiveRecord::Schema.define(version: 2021_01_08_200845) do
     t.string "tags"
     t.string "title"
     t.string "stats"
+  end
+
+  create_table "match_groups", force: :cascade do |t|
+    t.string "uuid"
+    t.string "name"
+    t.string "region"
+    t.string "password"
+    t.string "mode"
+    t.integer "size"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "roll_results", force: :cascade do |t|
+    t.integer "summoner_match_group_id"
+    t.integer "champion_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "summoner_champions", force: :cascade do |t|
+    t.integer "summoner_id"
+    t.integer "champion_id"
+    t.integer "mastery_level"
+    t.integer "champion_points"
+    t.integer "champion_points_since_last"
+    t.integer "champion_points_to_next"
+    t.string "chest_granted"
+    t.string "tokens_earned"
+    t.datetime "last_play_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "summoner_match_groups", force: :cascade do |t|
+    t.integer "summoner_id"
+    t.integer "match_group_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "summoners", force: :cascade do |t|
+    t.string "name"
+    t.string "profile_icon_id"
+    t.string "summoner_level"
+    t.string "region"
+    t.string "riot_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end

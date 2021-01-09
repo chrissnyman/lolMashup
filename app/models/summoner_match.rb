@@ -1,0 +1,2 @@
+class SummonerMatch < ApplicationRecord
+end

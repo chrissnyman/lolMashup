@@ -9,30 +9,19 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <a class="nav-link" href="/">Home
-            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/group/new">New Group
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" method="post" action="/summoner" >
-        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-        <label class="mr-sm-2" >Region:</label>
-        <select class="form-control mr-sm-2" id="region" name="region">
-          <option value="BR1">BR</option>
-          <option value="EUN1">EUN</option>
-          <option value="EUW1" selected>EUW</option>
-          <option value="JP1">JP</option>
-          <option value="KR">KR</option>
-          <option value="LA1">LA1</option>
-          <option value="LA2">LA2</option>
-          <option value="NA1">NA</option>
-          <option value="OC1">OC</option>
-          <option value="TR1">TR</option>
-          <option value="RU">RU</option>
-        </select>
-        <label class="mr-sm-2" >Summoner:</label>
-        <input class="form-control mr-sm-2" type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">View Summoner</button>
-      </form>
+      <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="/summoner">Summoner
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

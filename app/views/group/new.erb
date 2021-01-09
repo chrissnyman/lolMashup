@@ -1,0 +1,53 @@
+<%= content_for :head do %>
+    <title>New Group | LoL Mashup</title>
+<% end %>
+
+<%= content_for :content do %>
+    <%= render 'shared/navbar' %>
+    <div class="container">
+        <%= render 'shared/notices' %>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6">
+                <div class="card border-primary" >
+                    <div class="card-header">New Group</div>
+                    <div class="card-body">
+                        <form class="form" method="post" action="/group/create" >
+                            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                            <div class="form-group">
+                                <label for="name" >Group Name</label>
+                                <input type="text"  class="form-control" id="name" name="name" placeholder="e.g. 5v5 Trashup" autocomplete="new-password">
+                            </div>
+                            <div class="form-group">
+                                <label for="password" >Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password (leave blank for none)" autocomplete="new-password">
+                            </div>
+                            <div class="form-group">
+                                <label for="password" >Region</label>
+                                <select class="form-control" id="region" name="region">
+                                    <option value="BR1">BR</option>
+                                    <option value="EUN1">EUN</option>
+                                    <option value="EUW1" selected>EUW</option>
+                                    <option value="JP1">JP</option>
+                                    <option value="KR">KR</option>
+                                    <option value="LA1">LA1</option>
+                                    <option value="LA2">LA2</option>
+                                    <option value="NA1">NA</option>
+                                    <option value="OC1">OC</option>
+                                    <option value="TR1">TR</option>
+                                    <option value="RU">RU</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="size" >Group Size</label>
+                                <input type="number" class="form-control" id="size" name="size" value="5">
+                            </div>
+                            <button type="submit" class="btn btn-primary ">Create </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+<% end %>

@@ -7,62 +7,88 @@
 <%= content_for :content do %>
     <%= render 'shared/navbar' %>
     <div class="container">
-        <div class="jumbotron">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-8">
+                <form class="form-inline my-2 my-lg-0" method="post" action="/summoner" >
+                    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                    <label class="mr-sm-2" >Region:</label>
+                    <select class="form-control mr-sm-2" id="region" name="region">
+                    <option value="BR1">BR</option>
+                    <option value="EUN1">EUN</option>
+                    <option value="EUW1" selected>EUW</option>
+                    <option value="JP1">JP</option>
+                    <option value="KR">KR</option>
+                    <option value="LA1">LA1</option>
+                    <option value="LA2">LA2</option>
+                    <option value="NA1">NA</option>
+                    <option value="OC1">OC</option>
+                    <option value="TR1">TR</option>
+                    <option value="RU">RU</option>
+                    </select>
+                    <label class="mr-sm-2" >Summoner:</label>
+                    <input class="form-control mr-sm-2" type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name" >
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">View Summoner</button>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
+        <hr>
+        <% if @summoner.present? %>
+            <div class="jumbotron">
 
-            <div class="row">
-                <div class="col-3">
-                    <img class="img-fluid" src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= @summoner_data["profileIconId"] %>.png">
-                </div>
-                <div class="col-9">
-                    <h3 class="display-3"><%= @summoner_data["name"] %></h3>
-                    <p class="lead"><strong>Level</strong> <%= @summoner_data["summonerLevel"] %></p>
-
+                <div class="row">
+                    <div class="col-3">
+                        <img class="img-fluid" src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= @summoner.profile_icon_id %>.png">
+                    </div>
+                    <div class="col-9">
+                        <h3 class="display-3"><%= @summoner.name %></h3>
+                        <p class="lead"><strong>Level</strong> <%= @summoner.summoner_level %></p>
+                    </div>
                 </div>
             </div>
-            <hr class="my-4">
-        </div>
-        <p>Found mastery for <%= @summoner_champ_masteries.count %> champions:
-        <div class="row masteries">
-
-        <table class='table table-hover table-bordered datatable'>
-            <thead>
-                <tr>
-                    <th rowspan="2">Champion</th>
-                    <th rowspan="2">Mastery Level</th>
-                    <th colspan="3">Mastery Points</th>
-                    <th rowspan="2">Chest Granted</th>
-                    <th rowspan="2">Tokens Earned</th>
-                    <th rowspan="2">Last Play Time</th>
-                </tr>
-                <tr>
-                    <th>Total</th>
-                    <th>Since Last Level</th>
-                    <th>Until Next Level</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% @summoner_champ_masteries.each do |champ_mast| %>
+            <p>Found mastery for <%= @summoner.summoner_champions.count %> champions:
+            <div class="row masteries">
+            <table class='table table-hover table-bordered datatable'>
+                <thead>
                     <tr>
-                        <td><img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast[:imagename]%>" class="champ-pp "><span class='champ-name'><%= champ_mast[:name] %></span></td>
-                        <td class='text-center'><%= champ_mast[:championLevel] %></td>
-                        <td class='text-center'><%= champ_mast[:championPoints] %></td>
-                        <td class='text-center'><%= champ_mast[:championPointsSinceLastLevel] %></td>
-                        <td class='text-center'><%= champ_mast[:championPointsUntilNextLevel] %></td>
-                        <td class='text-center'><%= champ_mast[:chestGranted] %></td>
-                        <td class='text-center'><%= champ_mast[:tokensEarned] %></td>
-                        <td><%= champ_mast[:lastPlayTime].strftime("%Y-%m-%d") %></td>
+                        <th rowspan="2">Champion</th>
+                        <th rowspan="2">Mastery Level</th>
+                        <th colspan="3">Mastery Points</th>
+                        <th rowspan="2">Chest Granted</th>
+                        <th rowspan="2">Tokens Earned</th>
+                        <th rowspan="2">Last Play Time</th>
                     </tr>
-                <% end %>
-            </tbody>
-        </table>
+                    <tr>
+                        <th>Total</th>
+                        <th>Since Last Level</th>
+                        <th>Until Next Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @summoner.summoner_champions.each do |champ_mast| %>
+                        <tr>
+                            <td><img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast.champion.imagename%>" class="champ-pp "><span class='champ-name'><%= champ_mast.champion.name %></span></td>
+                            <td class='text-center'><%= champ_mast.mastery_level %></td>
+                            <td class='text-center'><%= champ_mast.champion_points %></td>
+                            <td class='text-center'><%= champ_mast.champion_points_since_last %></td>
+                            <td class='text-center'><%= champ_mast.champion_points_to_next %></td>
+                            <td class='text-center'><%= champ_mast.chest_granted %></td>
+                            <td class='text-center'><%= champ_mast.tokens_earned %></td>
+                            <td><%= champ_mast.last_play_time.strftime("%Y-%m-%d") %></td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+            <script>
+                $( document ).ready(function() {
+                    $('.datatable').dataTable({
+                        "paging":   false,
+                        "info":   false,
+                        "order": [[ 1, "desc" ]],
+                    });
+                });
+            </script>
+        <% end %>
     </div>
-    <script>
-        $( document ).ready(function() {
-            $('.datatable').dataTable({
-                "paging":   false,
-                "info":   false,
-                "order": [[ 1, "desc" ]],
-            });
-        });
-    </script>
 <% end %>
