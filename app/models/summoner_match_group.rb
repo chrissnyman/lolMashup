@@ -42,9 +42,10 @@ class SummonerMatchGroup < ApplicationRecord
         summ_spell_list = SummonerSpell.all
         while summoner_spell_list.count < 2
             offset = rand(summ_spell_list.count)
-            spell_id = summ_spell_list.offset(offset).first.id
-            next if summoner_spell_list.include? spell_id
-            summoner_spell_list << spell_id
+            spell = summ_spell_list.offset(offset).first
+            next if summoner_spell_list.include? spell.id
+            next if spell.name == "Smite" 
+            summoner_spell_list << spell.id
         end
 
         roll_data = {

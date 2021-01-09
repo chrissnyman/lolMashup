@@ -63,7 +63,8 @@ module Riot
             item_list = get_items
 
             item_list["data"].each do |item_id,item_data|
-                # puts "#{item_data["name"].ljust(40)} #{ "#{item_data["depth"]}".ljust(2)} #{item_data["tags"].join(', ').ljust(120)}, #{item_data["maps"].to_s.ljust(30)}, "
+                next unless item_data["maps"]['11'] == true #Summoners rift only
+
                 item_rarity = ''
                 item_rarity = 'Legendary' if item_data["description"].include? 'rarityLegendary'
                 item_rarity = 'Mythic' if item_data["description"].include? 'rarityMythic'
