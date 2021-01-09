@@ -67,13 +67,33 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <% if summoner_match_group.roll_result.present? %>
-                                <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=summoner_match_group.roll_result.champion.imagename%>" class="champ-pp ">
-                                
-                                <span><%= summoner_match_group.roll_result.champion.name%></span>
-                            <% else %>
-                                <h1 class='text-center'>Waiting for roll...</h1>
-                            <% end %>
+                            <div class="roll-result">
+                                <% if summoner_match_group.roll_result.present? %>
+                                    <div class=' champ'>
+                                        <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=summoner_match_group.roll_result.champion.imagename %>" class="img-fluid ">
+                                        <span class='champ-name'><%= summoner_match_group.roll_result.champion.name%></span>
+                                    </div>
+                                    <div class='champ-spell'>
+                                        <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=summoner_match_group.roll_result.champion_spell.imagename %>" class="img-fluid border border-success" data-toggle="tooltip"  title="<%=summoner_match_group.roll_result.champion_spell.name %>">
+                                    </div>
+                                    <div class="item-spell-section">
+                                        <div class='item-list'>
+                                            <% summoner_match_group.roll_result.item_build.split(',').each do |item_id| %>
+                                                <% cur_item = Item.find(item_id) %>
+                                                <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/<%=cur_item.imagename %>" class="item-pp <%= cur_item.rarity == 'Mythic' ? 'border border-primary' : 'border border-light' %>" data-toggle="tooltip"  title="<%=cur_item.name %>">
+                                            <% end %>
+                                        </div>
+                                        <div class='summoner-spell-list'>
+                                            <% summoner_match_group.roll_result.summoner_spells.split(',').each do |spell_id| %>
+                                                <% cur_spell = SummonerSpell.find(spell_id) %>
+                                                <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=cur_spell.imagename %>" class="spell-pp border border-success" data-toggle="tooltip"  title="<%=cur_spell.name %>">
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                <% else %>
+                                    <h1 class='text-center'>Waiting for roll result...</h1>
+                                <% end %>
+                            </div>
                         </div>
                     </div>
                 </div>

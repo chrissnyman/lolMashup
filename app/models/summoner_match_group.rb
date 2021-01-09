@@ -12,9 +12,48 @@ class SummonerMatchGroup < ApplicationRecord
         summoner_champion = self.summoner.summoner_champions.offset(offset).first
         puts "got champ #{summoner_champion.champion.name}"
 
+        item_list = []
+
+        boot_list = Item.where("tags like '%\"Boots\"%' and depth > 1")
+        offset = rand(boot_list.count)
+        boots = boot_list.offset(offset).first
+
+        mythic_list = Item.where(rarity: 'Mythic')
+        offset = rand(mythic_list.count)
+        mythic = mythic_list.offset(offset).first
+
+        item_list << boots.id
+        item_list << mythic.id
+
+        remaining_item_list = Item.where("depth > 2 and rarity != 'Mythic'")
+        while item_list.count < 6
+            offset = rand(remaining_item_list.count)
+            next_item_id = remaining_item_list.offset(offset).first.id
+            next if item_list.include? next_item_id
+            item_list << next_item_id
+        end
+        item_list.shuffle!
+
+        champ_spell_list = summoner_champion.champion.champion_spells
+        offset = rand(champ_spell_list.count)
+        champ_spell = champ_spell_list.offset(offset).first
+
+        summoner_spell_list = []
+        summ_spell_list = SummonerSpell.all
+        while summoner_spell_list.count < 2
+            offset = rand(summ_spell_list.count)
+            spell_id = summ_spell_list.offset(offset).first.id
+            next if summoner_spell_list.include? spell_id
+            summoner_spell_list << spell_id
+        end
+
         roll_data = {
             summoner_match_group_id: self.id,
             champion_id: summoner_champion.champion.id,
+            item_build: item_list.join(','),
+            summoner_spells: summoner_spell_list.join(','),
+            champion_spell_id: champ_spell.id,
+            rune_build: "",
         }
 
         if self.roll_result.present?

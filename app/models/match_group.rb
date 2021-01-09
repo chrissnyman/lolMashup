@@ -7,9 +7,4 @@ class MatchGroup < ApplicationRecord
     def set_uuid
         self.uuid = SecureRandom.uuid unless self.uuid.present?
     end
-
-
-    def roll_result(summoner_id)
-        nil
-    end
 end

@@ -14,17 +14,61 @@
  *= require_self
  */
 .masteries .table thead th {
-    text-align: center;
-    vertical-align: middle;
+  text-align: center;
+  vertical-align: middle;
 }
 
- .masteries .champ-pp {
-   width: 30px
- }
- .masteries .champ-name {
-     padding-left: 8px;
- }
+.masteries .champ-pp {
+  width: 30px
+}
+.masteries .champ-name {
+  padding-left: 8px;
+}
  
 .summoner-card img.profile-pp {
   width: 30px;
+}
+
+.summoner-card .roll-result   {
+  display: flex;
+}
+.summoner-card .champ   {
+  width: 90px;
+  display: inline-block
+}
+.summoner-card .champ-spell   {
+  width: 84px;
+  display: inline-block;
+  padding: 0px 10px;
+}
+.summoner-card .champ-skill   {
+  width: 70px;
+  display: inline-block;
+}
+.summoner-card .champ .champ-name  {
+  padding: 4px;
+  display: block;
+  text-align: center;
+}
+.summoner-card .item-spell-section   {
+  display: inline-block;
+}
+.summoner-card .item-list   {
+  display: block;
+  width: 312px;
+  height: 50px;
+}
+.summoner-card .item-list .item-pp   {
+  width: 48px;
+  border-width: 3px !important;
+}
+.summoner-card .summoner-spell-list   {
+  display: block;
+  width: 86px;
+  height: 42px;
+  padding-top: 4px;
+}
+.summoner-card .summoner-spell-list .spell-pp  {
+  width: 40px;
+  border-width: 2px !important;
 }
