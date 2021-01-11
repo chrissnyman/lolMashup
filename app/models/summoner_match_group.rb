@@ -47,6 +47,7 @@ class SummonerMatchGroup < ApplicationRecord
 
         def roll_champ(is_jungler = false)
             offset = rand(self.summoner.summoner_champions.count)
+
             summoner_champion = self.summoner.summoner_champions.offset(offset).first
 
             summoner_champion

@@ -26,13 +26,17 @@ class GroupController < ApplicationController
         summoner = Summoner.load_summoner(params[:region], params[:summoner_name])
 
         if summoner.present?
-            existing_summoner_match_group = SummonerMatchGroup.where({summoner_id: summoner.id, match_group_id: group.id}).first
-
-            if existing_summoner_match_group.present?
-                flash[:notice] = {message: "#{summoner.name} already added", class: 'warning'}
+            if summoner.champions.count > 0
+            
+                existing_summoner_match_group = SummonerMatchGroup.where({summoner_id: summoner.id, match_group_id: group.id}).first
+                if existing_summoner_match_group.present?
+                    flash[:notice] = {message: "#{summoner.name} already added", class: 'warning'}
+                else
+                    new_summoner_match_group = SummonerMatchGroup.create!({summoner_id: summoner.id, match_group_id: group.id})
+                    flash[:notice] = {message: "#{summoner.name} added", class: 'success'}
+                end
             else
-                new_summoner_match_group = SummonerMatchGroup.create!({summoner_id: summoner.id, match_group_id: group.id})
-                flash[:notice] = {message: "#{summoner.name} added", class: 'success'}
+                flash[:notice] = {message: "#{summoner.name} does not have any champion masteries yet", class: 'danger'}
             end
         else
             flash[:notice] = {message: "Summoner not found", class: 'danger'}
