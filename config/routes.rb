@@ -12,4 +12,5 @@ Rails.application.routes.draw do
 
   get 'group/:uuid' => 'group#show'
   get 'group/:uuid/roll' => 'group#roll'
+  get 'group/:uuid/change_game_mode/:game_mode_id' => 'group#change_game_mode'
 end

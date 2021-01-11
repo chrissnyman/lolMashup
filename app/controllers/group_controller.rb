@@ -48,6 +48,31 @@ class GroupController < ApplicationController
         end
         redirect_to "/group/#{group.uuid}"
     end
+
+    def change_game_mode
+        if params[:game_mode_id].present?
+            group = MatchGroup.where(uuid: params[:uuid]).first
+            new_mode = GameMode.find(params[:game_mode_id])
+            
+            error = ""
+            
+            error = "<strong>#{new_mode.name}</strong> can only be played with an even amount of players" if new_mode.even_player_count_needed and group.size % 2 != 0
+
+            error = "<strong>#{new_mode.name}</strong> needs a group size of <strong>#{new_mode.min_players}</strong> players" if group.size < new_mode.min_players
+
+            
+            if error != ""
+                flash[:notice] = {message: error, class: 'danger'}
+            elsif group.update(game_mode_id: params[:game_mode_id])
+                # flash[:notice] = {message: "Summoner not found", class: 'success'}
+            else
+                flash[:notice] = {message: "Error updating game mode", class: 'danger'}
+            end
+        else
+            flash[:notice] = {message: "Invalid game mode selected", class: 'danger'}
+        end
+        redirect_to "/group/#{group.uuid}"
+    end
     
     private
         def match_group_params

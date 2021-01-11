@@ -1,4 +1,5 @@
 class MatchGroup < ApplicationRecord
+    belongs_to :game_mode
     has_many :summoner_match_groups
     has_many :summoners, :through => :summoner_match_groups
 

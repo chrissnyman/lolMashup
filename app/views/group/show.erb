@@ -12,15 +12,18 @@
                     <div class="row">
                         <div class="col-6 text-right">Game Mode:</div>
                         <div class="col-6">
-                            <div class="btn-group " role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary">Normal</button>
-                                <button type="button" class="btn btn-outline-primary">No Jungle</button>
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= @group.game_mode.present? ? @group.game_mode.name : 'None' %></a>
+                            <div class="dropdown-menu">
+                                <% GameMode.all.each do |cur_mode| %>
+                                    <a class="dropdown-item" href="/group/<%= @group.uuid %>/change_game_mode/<%= cur_mode.id %>"><%= cur_mode.name %></a>
+                                <% end%>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 text-right">Players:</div>
                         <div class="col-6"> <%= @group.summoner_match_groups.count%> / <%= @group.size%></div>
+                        
                     </div>
                 </h4>
                 <hr>
@@ -56,50 +59,53 @@
                     <div class="card border-success summoner-card <%= 'summoner-card-right' if index % 2 == 0 %>">
                         <div class="card-header bg-success">
                             <div class='row'>
-                                <div class='col-8'>
-                                    <img class='profile-pp rounded-circle' src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= summoner_match_group.summoner.profile_icon_id %>.png">
-                                    <span><%= summoner_match_group.summoner.name%></span>
-                                </div>
-                                <div class='col-4 text-right'>
-                                    <a class='btn btn-outline-primary' href="/summoner/<%= @group.region %>/<%= summoner_match_group.summoner.name%>" target="_blank"> View Profile
+                                <div class='col-4'>
+                                    <a class='text-white' href="/summoner/<%= @group.region %>/<%= summoner_match_group.summoner.name%>" target="_blank">
+                                        <img class='profile-pp rounded-circle' src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= summoner_match_group.summoner.profile_icon_id %>.png">
+                                        <span><%= summoner_match_group.summoner.name%></span>
                                     </a>
+                                </div>
+                                <div class='col-4'>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="roll-result">
                                 <% if summoner_match_group.roll_result.present? %>
-                                    <div class=' champ'>
-                                        <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=summoner_match_group.roll_result.champion.imagename %>" class="img-fluid ">
-                                        <span class='champ-name'><%= summoner_match_group.roll_result.champion.name%></span>
-                                    </div>
-                                    <div class='champ-spell'>
-                                        <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=summoner_match_group.roll_result.champion_spell.imagename %>" class="img-fluid border border-success" data-toggle="tooltip"  title="<%=summoner_match_group.roll_result.champion_spell.name %>">
-                                    </div>
-                                    <div class="item-spell-section">
-                                        <div class='item-list'>
-                                            <% summoner_match_group.roll_result.item_build.split(',').each do |item_id| %>
-                                                <% cur_item = Item.find(item_id) %>
-                                                <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/<%=cur_item.imagename %>" class="item-pp <%= cur_item.rarity == 'Mythic' ? 'border border-primary' : 'border border-light' %>" data-toggle="tooltip"  title="<%=cur_item.name %>">
-                                            <% end %>
+                                    <h4 class="lane-role bg-info text-center"><%= summoner_match_group.roll_result.lane_role.name%></h4>
+                                    <div class="build-container">
+                                        <div class=' champ'>
+                                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=summoner_match_group.roll_result.champion.imagename %>" class="img-fluid ">
+                                            <span class='champ-name'><%= summoner_match_group.roll_result.champion.name%></span>
                                         </div>
-                                        <div class='summoner-spell-list'>
-                                            <% summoner_match_group.roll_result.summoner_spells.split(',').each do |spell_id| %>
-                                                <% cur_spell = SummonerSpell.find(spell_id) %>
-                                                <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=cur_spell.imagename %>" class="spell-pp border border-success" data-toggle="tooltip"  title="<%=cur_spell.name %>">
-                                            <% end %>
+                                        <div class='champ-spell'>
+                                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=summoner_match_group.roll_result.champion_spell.imagename %>" class="img-fluid border border-success" data-toggle="tooltip"  title="<%=summoner_match_group.roll_result.champion_spell.name %>">
                                         </div>
-                                        <% cur_rune_page = RunePage.from_string(summoner_match_group.roll_result.rune_build) %>
-                                        
-                                        <div class='rune-list'>
-                                            <img src="<%= image_url(cur_rune_page.rune_page[:primary][:rune_tree].icon) %>" class="rune-tree-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:primary][:rune_tree].name %>">
-                                            <% cur_rune_page.rune_page[:primary][:runes].each do |cur_rune| %>
-                                                <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
-                                            <% end %>
-                                            <img src="<%= image_url(cur_rune_page.rune_page[:secondary][:rune_tree].icon) %>" class="rune-tree-pp rune-tree-secondary-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:secondary][:rune_tree].name %>">
-                                            <% cur_rune_page.rune_page[:secondary][:runes].each do |cur_rune| %>
-                                                <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
-                                            <% end %>
+                                        <div class="item-spell-section">
+                                            <div class='item-list'>
+                                                <% summoner_match_group.roll_result.item_build.split(',').each do |item_id| %>
+                                                    <% cur_item = Item.find(item_id) %>
+                                                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/<%=cur_item.imagename %>" class="item-pp <%= cur_item.rarity == 'Mythic' ? 'border border-primary' : 'border border-light' %>" data-toggle="tooltip"  title="<%=cur_item.name %>">
+                                                <% end %>
+                                            </div>
+                                            <div class='summoner-spell-list'>
+                                                <% summoner_match_group.roll_result.summoner_spells.split(',').each do |spell_id| %>
+                                                    <% cur_spell = SummonerSpell.find(spell_id) %>
+                                                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=cur_spell.imagename %>" class="spell-pp border " data-toggle="tooltip"  title="<%=cur_spell.name %>">
+                                                <% end %>
+                                            </div>
+                                            <% cur_rune_page = RunePage.from_string(summoner_match_group.roll_result.rune_build) %>
+                                            
+                                            <div class='rune-list'>
+                                                <img src="<%= image_url(cur_rune_page.rune_page[:primary][:rune_tree].icon) %>" class="rune-pp rune-tree-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:primary][:rune_tree].name %>">
+                                                <% cur_rune_page.rune_page[:primary][:runes].each do |cur_rune| %>
+                                                    <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
+                                                <% end %>
+                                                <img src="<%= image_url(cur_rune_page.rune_page[:secondary][:rune_tree].icon) %>" class="rune-pp rune-tree-pp rune-tree-secondary-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:secondary][:rune_tree].name %>">
+                                                <% cur_rune_page.rune_page[:secondary][:runes].each do |cur_rune| %>
+                                                    <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
+                                                <% end %>
+                                            </div>
                                         </div>
                                     </div>
                                 <% else %>

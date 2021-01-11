@@ -37,12 +37,21 @@
   }
 }
 
+.card.summoner-card .card-body {
+  padding: 0px;
+}
+.card.summoner-card .card-body {
+  padding: 0px;
+  padding-bottom: 20px;
+}
 .summoner-card img.profile-pp {
   width: 30px;
 }
 
-.summoner-card .roll-result   {
-  display: flex;
+.summoner-card .roll-result {
+}
+.summoner-card .roll-result .lane-role {
+  padding: 8px
 }
 .summoner-card .champ   {
   width: 124px;
@@ -64,6 +73,14 @@
 }
 .summoner-card .item-spell-section   {
   display: inline-block;
+  width: 358px;
+}
+.summoner-card .build-container   {
+  padding: 0px 12px;
+}
+
+.summoner-card .build-container *  {
+  vertical-align: top;
 }
 .summoner-card .item-list   {
   display: block;
@@ -90,14 +107,15 @@
   width: 400px;
   height: 50px;
 }
+.summoner-card .rune-list .rune-pp   {
+  width: 36px;
+  background: black;
+  border-radius: 50%;
+}
 .summoner-card .rune-list .rune-tree-pp   {
-  width: 48px;
-  border-width: 3px !important;
+  width: 40px;
+  padding: 3px;
 }
 .summoner-card .rune-list .rune-tree-secondary-pp   {
   margin-left: 20px
-}
-.summoner-card .rune-list .rune-pp   {
-  width: 36px;
-  border-width: 3px !important;
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_111529) do
+ActiveRecord::Schema.define(version: 2021_01_11_142634) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(version: 2021_01_11_111529) do
     t.string "stats"
   end
 
+  create_table "game_modes", force: :cascade do |t|
+    t.string "name"
+    t.integer "min_players", default: 1
+    t.boolean "even_player_count_needed", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "imagename"
@@ -49,15 +57,21 @@ ActiveRecord::Schema.define(version: 2021_01_11_111529) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "lane_roles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "match_groups", force: :cascade do |t|
     t.string "uuid"
     t.string "name"
     t.string "region"
     t.string "password"
-    t.string "mode"
     t.integer "size"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "game_mode_id"
   end
 
   create_table "roll_results", force: :cascade do |t|
@@ -69,6 +83,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_111529) do
     t.string "summoner_spells"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "lane_role_id"
   end
 
   create_table "rune_slots", force: :cascade do |t|
