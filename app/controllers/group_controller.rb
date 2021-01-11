@@ -4,7 +4,7 @@ class GroupController < ApplicationController
     end
     
     def create
-        match = MatchGroup.create(match_group_params)
+        match = MatchGroup.create!(match_group_params)
         if match.present?
             redirect_to "/group/#{match.uuid}"
         else
@@ -76,7 +76,7 @@ class GroupController < ApplicationController
     
     private
         def match_group_params
-            params.permit(:name, :password, :size, :region)
+            params.permit(:name, :password, :size, :region, :game_mode_id)
         end
 
 end
