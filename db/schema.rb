@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_09_070957) do
+ActiveRecord::Schema.define(version: 2021_01_11_111529) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -67,6 +67,30 @@ ActiveRecord::Schema.define(version: 2021_01_09_070957) do
     t.string "item_build"
     t.string "rune_build"
     t.string "summoner_spells"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "rune_slots", force: :cascade do |t|
+    t.integer "rune_tree_id"
+    t.integer "slot_index"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "rune_trees", force: :cascade do |t|
+    t.string "icon"
+    t.string "key"
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "runes", force: :cascade do |t|
+    t.integer "rune_slot_id"
+    t.string "icon"
+    t.string "key"
+    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

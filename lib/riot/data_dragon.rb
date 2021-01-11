@@ -115,6 +115,57 @@ module Riot
             end
         end
 
+        def refresh_rune_list
+            rune_list = get_rune_list
+
+            rune_list.each do |rune_tree|
+                # puts "#{rune_tree["name"]}"
+                rune_tree_obj = {
+                  icon: rune_tree["icon"],
+                  key: rune_tree["key"],
+                  name: rune_tree["name"],
+                }
+                cur_rune_tree = RuneTree.where(name: rune_tree["name"]).first
+                if cur_rune_tree.present?
+                    cur_rune_tree.update(rune_tree_obj)
+                else
+                    RuneTree.create!(rune_tree_obj)
+                    cur_rune_tree = RuneTree.where(name: rune_tree["name"]).first
+                end
+                
+                rune_tree["slots"].each_with_index do |rune_slot,index|
+                    rune_slot_obj = {
+                      rune_tree_id: cur_rune_tree.id,
+                      slot_index: index,
+                    }
+                    cur_rune_slot = RuneSlot.where(rune_slot_obj).first
+                    unless cur_rune_slot.present?
+                        RuneSlot.create!(rune_slot_obj)
+                        cur_rune_slot = RuneSlot.where(rune_slot_obj).first
+                    end
+                    
+                    rune_slot["runes"].each do |rune|
+                        # puts " #{index} - #{rune["name"]}"
+                        rune_obj = {
+                            rune_slot_id: cur_rune_slot.id,
+                            icon: rune["icon"],
+                            key: rune["key"],
+                            name: rune["name"],
+                        }
+
+                        cur_rune = Rune.where(rune_slot_id: cur_rune_slot.id, name: rune["name"]).first
+                        if cur_rune.present?
+                            cur_rune.update(rune_obj)
+                        else
+                            Rune.create!(rune_obj)
+                            # cur_rune = Rune.where(name: rune["name"]).first
+                        end
+                    end
+                end
+                puts "------------------"
+            end
+        end
+
         private
             def current_meta_version
                 @meta_version if @meta_version.present?
@@ -139,6 +190,10 @@ module Riot
 
             def get_summoner_spell_list
                 perform_call("#{api_url}/summoner.json",'get')
+            end
+
+            def get_rune_list
+                perform_call("#{api_url}/runesReforged.json",'get')
             end
             
             def perform_call(endpoint,call_type,get_data = {}, post_data = {})

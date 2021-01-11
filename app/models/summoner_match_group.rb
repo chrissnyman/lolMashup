@@ -48,13 +48,15 @@ class SummonerMatchGroup < ApplicationRecord
             summoner_spell_list << spell.id
         end
 
+        rune_page = RunePage.build_random_page
+
         roll_data = {
             summoner_match_group_id: self.id,
             champion_id: summoner_champion.champion.id,
             item_build: item_list.join(','),
             summoner_spells: summoner_spell_list.join(','),
             champion_spell_id: champ_spell.id,
-            rune_build: "",
+            rune_build: rune_page.stringify,
         }
 
         if self.roll_result.present?

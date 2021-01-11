@@ -25,6 +25,18 @@
   padding-left: 8px;
 }
  
+.summoner-card {
+  margin-bottom: 20px;
+}
+@media (min-width:1200px) {
+  .summoner-card {
+    width: 600px;
+  }
+  .summoner-card-right {
+    float: right !important;
+  }
+}
+
 .summoner-card img.profile-pp {
   width: 30px;
 }
@@ -55,7 +67,7 @@
 }
 .summoner-card .item-list   {
   display: block;
-  width: 312px;
+  width: 420px;
   height: 50px;
 }
 .summoner-card .item-list .item-pp   {
@@ -71,4 +83,21 @@
 .summoner-card .summoner-spell-list .spell-pp  {
   width: 40px;
   border-width: 2px !important;
+}
+.summoner-card .rune-list   {
+  display: block;
+  padding-top: 10px;
+  width: 400px;
+  height: 50px;
+}
+.summoner-card .rune-list .rune-tree-pp   {
+  width: 48px;
+  border-width: 3px !important;
+}
+.summoner-card .rune-list .rune-tree-secondary-pp   {
+  margin-left: 20px
+}
+.summoner-card .rune-list .rune-pp   {
+  width: 36px;
+  border-width: 3px !important;
 }

@@ -51,9 +51,9 @@
     </div>
     <div class="container-fluid mt-5">
         <div class='row'>
-            <% @group.summoner_match_groups.each do |summoner_match_group| %>
-                <div class='col-6'>
-                    <div class="card border-success summoner-card">
+            <% @group.summoner_match_groups.each_with_index do |summoner_match_group,index| %>
+                <div class='col-xl-6'>
+                    <div class="card border-success summoner-card <%= 'summoner-card-right' if index % 2 == 0 %>">
                         <div class="card-header bg-success">
                             <div class='row'>
                                 <div class='col-8'>
@@ -87,6 +87,18 @@
                                             <% summoner_match_group.roll_result.summoner_spells.split(',').each do |spell_id| %>
                                                 <% cur_spell = SummonerSpell.find(spell_id) %>
                                                 <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=cur_spell.imagename %>" class="spell-pp border border-success" data-toggle="tooltip"  title="<%=cur_spell.name %>">
+                                            <% end %>
+                                        </div>
+                                        <% cur_rune_page = RunePage.from_string(summoner_match_group.roll_result.rune_build) %>
+                                        
+                                        <div class='rune-list'>
+                                            <img src="<%= image_url(cur_rune_page.rune_page[:primary][:rune_tree].icon) %>" class="rune-tree-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:primary][:rune_tree].name %>">
+                                            <% cur_rune_page.rune_page[:primary][:runes].each do |cur_rune| %>
+                                                <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
+                                            <% end %>
+                                            <img src="<%= image_url(cur_rune_page.rune_page[:secondary][:rune_tree].icon) %>" class="rune-tree-pp rune-tree-secondary-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:secondary][:rune_tree].name %>">
+                                            <% cur_rune_page.rune_page[:secondary][:runes].each do |cur_rune| %>
+                                                <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
                                             <% end %>
                                         </div>
                                     </div>
