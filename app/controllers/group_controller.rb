@@ -1,7 +1,9 @@
 class GroupController < ApplicationController
 
     def new
+        
         @match_group_params = {
+            name: Spicy::Proton.format('%a %a %n').titleize.gsub(' ',''),
             region: 'EUW1',
             game_mode_id: GameMode.where(name: 'No Rules').first.id,
             size: 5,
