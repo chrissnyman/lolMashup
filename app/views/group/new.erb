@@ -8,7 +8,7 @@
         <%= render 'shared/notices' %>
         <div class="row">
             <div class="col"></div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <div class="card border-primary" >
                     <div class="card-header">New Group</div>
                     <div class="card-body">
@@ -16,39 +16,34 @@
                             <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
                             <div class="form-group">
                                 <label for="name" >Group Name</label>
-                                <input type="text"  class="form-control" id="name" name="name" placeholder="e.g. 5v5 Trashup" autocomplete="new-password">
+                                <input type="text" required class="form-control" id="name" name="name" placeholder="e.g. 5v5 Trashup" value="<%= @match_group_params[:name] %>" autocomplete="new-password">
                             </div>
                             <div class="form-group">
                                 <label for="password" >Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password (leave blank for none)" autocomplete="new-password">
+                                <input type="password" class="form-control" id="password" name="password" value="<%= @match_group_params[:password] %>"placeholder="Password (leave blank for none)" autocomplete="new-password">
                             </div>
                             <div class="form-group">
                                 <label for="password" >Region</label>
                                 <select class="form-control" id="region" name="region">
-                                    <option value="BR1">BR</option>
-                                    <option value="EUN1">EUN</option>
-                                    <option value="EUW1" selected>EUW</option>
-                                    <option value="JP1">JP</option>
-                                    <option value="KR">KR</option>
-                                    <option value="LA1">LA1</option>
-                                    <option value="LA2">LA2</option>
-                                    <option value="NA1">NA</option>
-                                    <option value="OC1">OC</option>
-                                    <option value="TR1">TR</option>
-                                    <option value="RU">RU</option>
+                                    <% ServerRegion.all.each do |region| %>
+                                        <option <%= 'selected' if @match_group_params[:region] == region[:region_code]%> value="<%= region[:region_code] %>"><%= region[:name] %></option>
+                                    <% end %>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="password" >Game Mode</label>
-                                <select type="number" class="form-control" id="game_mode_id" name="game_mode_id" max="10" value="1">
+                                <select type="number" class="form-control" id="game_mode_id" name="game_mode_id" max="10" value="35">
                                     <% GameMode.all.each do |cur_mode| %>
-                                        <option value="<%= cur_mode.id %>"><%= cur_mode.name %></option>
+                                        <option <%= 'selected' if "#{@match_group_params[:game_mode_id]}" == "#{cur_mode.id}" %> value="<%= cur_mode.id %>"><%= cur_mode.name %></option>
                                     <% end%>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="size" >Group Size</label>
-                                <input type="number" class="form-control" id="size" name="size" max="10" value="5">
+                                <div class="range-slider input-group">
+                                    <span class="range-slider__value col-1">0</span>
+                                    <input type="range" class="col-11 custom-range range-slider__range" id="size" name="size" min="1" max="10" value="<%= @match_group_params[:size] %>">
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary ">Create </button>
                         </form>
@@ -58,4 +53,25 @@
             <div class="col"></div>
         </div>
     </div>
+    <script>
+        var rangeSlider = function(){
+            var slider = $('.range-slider'),
+                range = $('.range-slider__range'),
+                value = $('.range-slider__value');
+                
+            slider.each(function(){
+
+                value.each(function(){
+                var value = $(this).next().attr('value');
+                    $(this).html(value);
+                });
+
+                range.on('input', function(){
+                    $(this).prev(value).html(this.value);
+                });
+            });
+        };
+
+        rangeSlider();
+    </script>
 <% end %>

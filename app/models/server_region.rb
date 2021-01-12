@@ -1,0 +1,2 @@
+class ServerRegion < ApplicationRecord
+end

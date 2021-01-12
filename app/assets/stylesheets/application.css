@@ -36,6 +36,11 @@
     float: right !important;
   }
 }
+@media (min-width:972px) {
+  .md-float-right {
+    float: right;
+  }
+}
 
 .card.summoner-card .card-body {
   padding: 0px;
@@ -48,7 +53,8 @@
   width: 30px;
 }
 
-.summoner-card .roll-result {
+.summoner-card .roll-result > H1 {
+  padding-top: 30px;
 }
 .summoner-card .roll-result .lane-role {
   padding: 8px
@@ -118,4 +124,9 @@
 }
 .summoner-card .rune-list .rune-tree-secondary-pp   {
   margin-left: 20px
+}
+
+.range-slider__value {
+  padding: 0px;
+  text-align: center;
 }

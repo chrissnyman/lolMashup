@@ -60,7 +60,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  ENV['RIOT_API_KEY'] = 'RGAPI-641363eb-25a3-427d-8315-f9960ab877c7'
+  ENV['RIOT_API_KEY'] = 'RGAPI-5ff75b5f-d009-4ad4-ac36-56131bbc160c'
 
 
 end

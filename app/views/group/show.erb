@@ -38,7 +38,7 @@
                                     <%= hidden_field_tag :uuid, @group.uuid %>
                                     <%= hidden_field_tag :region, @group.region %>
                                     <label class="mr-sm-2" >Add Summoner:</label>
-                                    <input class="form-control " type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name" >
+                                    <input class="form-control " required type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name" >
                                     <button class="btn btn-secondary" type="submit">Add</button>
                                 </form>
                             <% else %>
@@ -60,12 +60,13 @@
                         <div class="card-header bg-success">
                             <div class='row'>
                                 <div class='col-4'>
-                                    <a class='text-white' href="/summoner/<%= @group.region %>/<%= summoner_match_group.summoner.name%>" target="_blank">
+                                    <a class='text-white' href="/summoner/<%= @group.region %>/<%= summoner_match_group.summoner.name%>" target="_blank"  data-toggle="tooltip"  title="Click to view profile">
                                         <img class='profile-pp rounded-circle' src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= summoner_match_group.summoner.profile_icon_id %>.png">
                                         <span><%= summoner_match_group.summoner.name%></span>
                                     </a>
                                 </div>
-                                <div class='col-4'>
+                                <div class='col text-right'>
+                                    <a class="text-white" href="/group/<%= @group.uuid %>/remove_summoner/<%= summoner_match_group.summoner.id %>"  data-toggle="tooltip"  title="Remove Summoner">X</a>
                                 </div>
                             </div>
                         </div>
@@ -118,4 +119,24 @@
             <% end %>
         </div>
     </div>
+    <script>
+        var last_update_time = <%= @group.updated_at.to_i %>;
+        var refresh_delay = <%= @refresh_delay %>;
+        function check_reload() {
+            $.get('/group/<%= @group.uuid %>/last_updated', function(response) {
+                // console.log('check_reload', response);
+                if (last_update_time != response) {
+                    location.reload();
+                    // console.log('reload!');
+                }
+                wait_check_reload();
+            })
+        }
+        function wait_check_reload() {
+            setTimeout(() => {
+                check_reload();
+            }, refresh_delay);
+        }
+        wait_check_reload();
+    </script>
 <% end %>
