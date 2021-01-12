@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_100543) do
+ActiveRecord::Schema.define(version: 2021_01_12_211205) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_100543) do
     t.string "gold"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "purchasable"
   end
 
   create_table "lane_roles", force: :cascade do |t|
@@ -84,6 +85,7 @@ ActiveRecord::Schema.define(version: 2021_01_12_100543) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "lane_role_id"
+    t.string "team"
   end
 
   create_table "rune_slots", force: :cascade do |t|

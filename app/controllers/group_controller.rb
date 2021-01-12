@@ -72,8 +72,9 @@ class GroupController < ApplicationController
 
     def roll
         group = MatchGroup.where(uuid: params[:uuid]).first
-        group.summoner_match_groups.each do |summoner_match_group|
-            summoner_match_group.roll_build 
+        group.reset
+        group.summoner_match_groups.shuffle.each do |summoner_match_group|
+            summoner_match_group.roll_build
         end
         group.update(updated_at: Time.now)
         redirect_to "/group/#{group.uuid}"

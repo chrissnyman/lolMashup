@@ -81,7 +81,8 @@ module Riot
                     from: item_data["from"],
                     # maps: item_data["maps"],
                     # title: item_data["title"],
-                    # gold: item_data["gold"],
+                    gold: item_data["gold"]["base"],
+                    purchasable: item_data["gold"]["purchasable"],
                 }
                 if Item.where(id: item_obj[:id]).count == 1
                   Item.find(item_obj[:id]).update(item_obj)
