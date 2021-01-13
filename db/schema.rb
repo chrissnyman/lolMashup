@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_13_201709) do
+ActiveRecord::Schema.define(version: 2021_01_13_223133) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -73,6 +73,8 @@ ActiveRecord::Schema.define(version: 2021_01_13_201709) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "game_mode_id"
+    t.string "team1_name", default: "Blue Team"
+    t.string "team2_name", default: "Red Team"
   end
 
   create_table "roll_results", force: :cascade do |t|

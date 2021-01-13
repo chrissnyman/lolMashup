@@ -139,7 +139,7 @@ class GroupController < ApplicationController
     
     private
         def match_group_params
-            params.permit(:name, :password, :size, :region, :game_mode_id)
+            params.permit(:name, :password, :size, :region, :game_mode_id, :team1_name, :team2_name)
         end
 
 end
