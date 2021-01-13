@@ -8,10 +8,11 @@ Rails.application.routes.draw do
 
   get 'group/new' => 'group#new'
   post 'group/create' => 'group#create'
+  get 'group/:uuid/edit' => 'group#edit'
+  post 'group/update' => 'group#update'
   post 'group/add_summoner' => 'group#add_summoner'
-
+  get 'group/:uuid/remove_summoner/:summoner_match_group_id' => 'group#add_summoner'
   get 'group/:uuid' => 'group#show'
   get 'group/:uuid/roll' => 'group#roll'
   get 'group/:uuid/last_updated' => 'group#get_last_updated'
-  get 'group/:uuid/change_game_mode/:game_mode_id' => 'group#change_game_mode'
 end

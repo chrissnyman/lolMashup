@@ -1,13 +1,15 @@
 
 <% if notice.present? %>
-  <div class="row mt-3">
-    <div class="col-3"></div>
-    <div class="col-6">
-      <div class="alert alert-dismissable alert-<%= notice["class"] %>">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <%= raw notice["message"] %>
-      </div>
-    </div>
-    <div class="col-3"></div>
+<div class="toast " role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+  <div class="toast-header">
+    <strong class="mr-auto"><%= raw notice["title"] %></strong>
+    
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
+  <div class="toast-body">
+    <%= raw notice["message"] %>
+  </div>
+</div>
 <% end %>

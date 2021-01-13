@@ -10,14 +10,14 @@
                     </a>
                 </div>
                 <div class='col text-right'>
-                    <a class="text-white" href="/group/<%= locals[:group].uuid %>/remove_summoner/<%= locals[:summoner_match_group].summoner.id %>"  data-toggle="tooltip"  title="Remove Summoner">X</a>
+                    <a class="text-white" href="/group/<%= locals[:group].uuid %>/remove_summoner/<%= locals[:summoner_match_group].id %>"  data-toggle="tooltip"  title="Remove Summoner">X</a>
                 </div>
             </div>
         </div>
         <div class="card-body">
             <div class="roll-result">
                 <% if locals[:summoner_match_group].roll_result.present? %>
-                    <h4 class="lane-role text-center <%= locals[:summoner_match_group].roll_result.team == 'Red Team' ? 'bg-danger' : 'bg-info' %>"><%= locals[:summoner_match_group].roll_result.team%>: <%= locals[:summoner_match_group].roll_result.lane_role.name%></h4>
+                    <h4 class="lane-role text-center <%= locals[:summoner_match_group].team == 'Red Team' ? 'bg-danger' : 'bg-info' %>"><%= locals[:summoner_match_group].team%>: <%= locals[:summoner_match_group].lane_role.try(:name)%></h4>
                     <div class="build-container">
                         <div class=' champ'>
                             <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=locals[:summoner_match_group].roll_result.champion.imagename %>" class="img-fluid ">

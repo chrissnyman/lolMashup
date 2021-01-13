@@ -1,5 +1,5 @@
 class MatchGroup < ApplicationRecord
-    belongs_to :game_mode
+    belongs_to :game_mode, optional: true
     has_many :summoner_match_groups
     has_many :summoners, :through => :summoner_match_groups
     has_many :roll_results, :through => :summoner_match_groups
@@ -21,42 +21,87 @@ class MatchGroup < ApplicationRecord
             team1: [],
             team2: [],
         }
-        self.available_roles = get_available_lane_roles
         self.team_count = get_team_count
+        self.available_roles = get_available_lane_roles
         self.team1_player_count = 0
         self.team2_player_count = 0
         
         self.summoner_match_groups.each do |summoner_match_group|
-            summoner_match_group.roll_result.update!(lane_role_id: nil) if summoner_match_group.roll_result.present?
+            team = roll_next_team
+            lane_role = roll_lane_role(team)
+            summoner_match_group.update!(lane_role_id: lane_role.id, team: team)
         end
+    end
+
+    def roll_next_team
+        if self.team_count == 2 && self.team1_player_count > self.team2_player_count
+            team = 2
+            self.team2_player_count += 1
+        else
+            team = 1
+            self.team1_player_count += 1
+        end
+
+        team
+    end
+
+    def roll_lane_role(team)
+        lane_role_list = self.get_allowed_lane_roles(team)
+        offset = rand(lane_role_list.count)
+        lane_role = LaneRole.where(name: lane_role_list[offset]).first
+        
+        self.filled_roles[:team1] << lane_role.name if team == 1
+        self.filled_roles[:team2] << lane_role.name if team == 2
+
+        lane_role
+    end
+
+    def get_allowed_lane_roles(team)
+        allowed_lane_roles = self.available_roles
+
+        filled_roles = self.filled_roles[:team1] if team == 1
+        filled_roles = self.filled_roles[:team2] if team == 2
+
+        filled_roles.each do |cur_lane_role|
+            allowed_lane_roles = remove_item_from_list(allowed_lane_roles,cur_lane_role)
+        end
+
+        allowed_lane_roles
+    end
+
+    def remove_item_from_list(list,remove_item)
+        new_list = []
+        removed = false
+        list.each do |cur_item|
+            if removed == true or cur_item != remove_item
+                new_list << cur_item 
+            else
+                removed = true
+            end
+        end
+        new_list
     end
     
     def get_available_lane_roles
-
         no_jungle = false
-        case self.game_mode.name
-            when 'Classic 5v5 (No Jungle)'
-                no_jungle = true
-            when 'Custom (No Jungle)'
-                no_jungle = true
-            when 'Mirrored (No Jungle)'
-                no_jungle = true
-        end
+        no_jungle = true if self.game_mode.name.include? 'No Jungle'
         
         if no_jungle
-            allowed_lane_roles = {
-                team1: (LaneRole.where.not(name: 'Jungle') + LaneRole.where(name: 'Top')).to_a,
-                team2: (LaneRole.where.not(name: 'Jungle') + LaneRole.where(name: 'Top')).to_a,
-            }
+            role_list = LaneRole.where.not(name: 'Jungle').pluck(:name) + ['Top']
         else
-            allowed_lane_roles = {
-                team1: LaneRole.all.to_a,
-                team2: LaneRole.all.to_a,
-            }
+            role_list = LaneRole.all.pluck(:name)
+        end
+
+        role_count = 0
+        allowed_lane_roles = []
+        role_list.shuffle.each do |cur_role|
+            allowed_lane_roles << cur_role if role_count < self.size
+            role_count += self.team_count
         end
         
         allowed_lane_roles
     end
+    
     def get_team_count
         team_count = 1
         case self.game_mode.name
@@ -77,31 +122,6 @@ class MatchGroup < ApplicationRecord
         end
         
         team_count
-    end
-
-    def get_allowed_lane_roles(team)
-        return self.available_roles[:team1] if team == 1
-        return self.available_roles[:team2] if team == 2
-    end
-
-    def remove_lane_role(team,lane_role)
-        if team == 1
-            self.available_roles[:team1] = remove_item_from_list(self.available_roles[:team1],lane_role)
-        else
-            self.available_roles[:team2] = remove_item_from_list(self.available_roles[:team2],lane_role)
-        end
-    end
-    def remove_item_from_list(list,remove_item)
-        new_list = []
-        removed = false
-        list.each do |cur_item|
-            if removed == true or cur_item != remove_item
-                new_list << cur_item 
-            else
-                removed = true
-            end
-        end
-        new_list
     end
 
     def self.validate_group_mode(game_mode_id, group_size)

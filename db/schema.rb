@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_12_211205) do
+ActiveRecord::Schema.define(version: 2021_01_13_201709) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -84,8 +84,6 @@ ActiveRecord::Schema.define(version: 2021_01_12_211205) do
     t.string "summoner_spells"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "lane_role_id"
-    t.string "team"
   end
 
   create_table "rune_slots", force: :cascade do |t|
@@ -138,6 +136,8 @@ ActiveRecord::Schema.define(version: 2021_01_12_211205) do
     t.integer "match_group_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "lane_role_id"
+    t.string "team"
   end
 
   create_table "summoner_spells", force: :cascade do |t|

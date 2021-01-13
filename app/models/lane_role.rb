@@ -1,3 +1,3 @@
 class LaneRole < ApplicationRecord
-    has_many :roll_results
+    has_many :summoner_match_groups
 end

@@ -9,6 +9,9 @@ class GroupController < ApplicationController
             size: 5,
         }
     end
+    def edit
+        @group = MatchGroup.where(uuid: params[:uuid]).first
+    end
     
     def create
         flash[:notice] = nil
@@ -23,14 +26,45 @@ class GroupController < ApplicationController
             else
                 @match_group_params = match_group_params
                 #we have to create the notice slightly different here as we are skipping a few built-in controller steps by rendering the 'new' page directly
-                flash[:notice] =  {"message"=>error, "class"=>"danger"}
+                flash[:notice] =  {"title" => "Create Match Group", "message"=> "Error creating group...", "class"=>"danger"}
                 render 'new'
             end
         else
             @match_group_params = match_group_params
             #we have to create the notice slightly different here as we are skipping a few built-in controller steps by rendering the 'new' page directly
-            flash[:notice] =  {"message"=>error, "class"=>"danger"}
+            flash[:notice] =  {"title" => "Create Match Group", "message"=>error, "class"=>"danger"}
             render 'new'
+        end
+    end
+    
+    def update
+        flash[:notice] = nil
+        group_size = 0
+        group_size = match_group_params[:size].to_i if match_group_params[:size].present?
+
+        error = MatchGroup.validate_group_mode(match_group_params[:game_mode_id], group_size)
+        if error == ""
+            group_match = MatchGroup.where(uuid: params[:uuid]).first
+            clear_summoners = false
+            clear_summoners = true if match_group_params[:region] != group_match.region
+            if group_match.update(match_group_params)
+                redirect_to "/group/#{group_match.uuid}"
+                flash[:notice] =  {"title" => "Update Match Group", "message"=>"Changes saved", "class"=>"success"}
+                if clear_summoners
+                    group_match.summoner_match_groups.delete_all
+                    flash[:notice] =  {"title" => "Update Match Group", "message"=>"Changes saved, summoners removed due to region change", "class"=>"info"}
+                end
+            else
+                @group = match_group_params
+                #we have to create the notice slightly different here as we are skipping a few built-in controller steps by rendering the 'new' page directly
+                flash[:notice] =  {"title" => "Error", "message"=>group_match.errors, "class"=>"danger"}
+                render 'edit'
+            end
+        else
+            @group = match_group_params
+            #we have to create the notice slightly different here as we are skipping a few built-in controller steps by rendering the 'new' page directly
+            flash[:notice] =  {"title" => "Error", "message"=>error, "class"=>"danger"}
+            render 'edit'
         end
     end
 
@@ -40,10 +74,11 @@ class GroupController < ApplicationController
         @refresh_delay = 10000 if @group.roll_results.count == @group.size
         
         unless @group.present?
-            flash[:notice] = {message: "Group not found", class: 'warning'}
+            flash[:notice] = {title: "Error", message: "Group not found", class: 'warning'}
             redirect_to "/group/new"
         end
     end
+
 
     def add_summoner
         group = MatchGroup.where(uuid: params[:uuid]).first
@@ -54,22 +89,37 @@ class GroupController < ApplicationController
             
                 existing_summoner_match_group = SummonerMatchGroup.where({summoner_id: summoner.id, match_group_id: group.id}).first
                 if existing_summoner_match_group.present?
-                    flash[:notice] = {message: "#{summoner.name} already added", class: 'warning'}
+                    flash[:notice] = {title: "Add summoner", message: "#{summoner.name} already added", class: 'warning'}
                 else
                     new_summoner_match_group = SummonerMatchGroup.create!({summoner_id: summoner.id, match_group_id: group.id})
                     group.update(updated_at: Time.now)
-                    flash[:notice] = {message: "#{summoner.name} added", class: 'success'}
+                    flash[:notice] = {title: "Add summoner", message: "#{summoner.name} added", class: 'success'}
                 end
             else
-                flash[:notice] = {message: "#{summoner.name} does not have any champion masteries yet", class: 'danger'}
+                flash[:notice] = {title: "Add summoner", message: "#{summoner.name} does not have any champion masteries yet", class: 'danger'}
             end
         else
-            flash[:notice] = {message: "Summoner not found", class: 'danger'}
+            flash[:notice] = {title: "Add summoner", message: "Summoner not found", class: 'danger'}
         end
 
         redirect_to "/group/#{group.uuid}"
     end
+    def remove_summoner
+        group = MatchGroup.where(uuid: params[:uuid]).first
+        summoner_match_group = group.summoner_match_groups.where(id: params[:summoner_match_group_id]).first
+        
+        if summoner_match_group.present?
+            if summoner_match_group.delete
+                flash[:notice] = {title: "Remove summoner", message: "Summoner removed", class: 'success'}
+            else
+                flash[:notice] = {title: "Remove summoner", message: "Could not remove summoner", class: 'danger'}
+            end
+        else
+            flash[:notice] = {title: "Remove summoner", message: "Summoner already removed", class: 'info'}
+        end
 
+        redirect_to "/group/#{group.uuid}"
+    end
     def roll
         group = MatchGroup.where(uuid: params[:uuid]).first
         group.reset
@@ -85,21 +135,6 @@ class GroupController < ApplicationController
         puts "get_last_updated: #{group}"
         
         render json: group.updated_at.to_i
-    end
-
-    def change_game_mode
-        group = MatchGroup.where(uuid: params[:uuid]).first
-        error = MatchGroup.validate_group_mode(params[:game_mode_id], group.size)
-        if error == ""
-            if group.update(game_mode_id: params[:game_mode_id])
-                # flash[:notice] = {message: "Summoner not found", class: 'success'}
-            else
-                flash[:notice] = {message: "Error updating game mode", class: 'danger'}
-            end
-        else
-            flash[:notice] = {message: error, class: 'danger'}
-        end
-        redirect_to "/group/#{params[:uuid]}"
     end
     
     private

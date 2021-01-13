@@ -6,24 +6,22 @@
     <%= render 'shared/navbar' %>
     <div class="container">
         <div class="card border-primary ">
-            <div class="card-header bg-dark"><h1 class='text-center'><%= @group.name%> <span class="badge badge-success"><%= @group.region.upcase%></span></h1></div>
+            <div class="card-header bg-dark"><h1 class='text-center'><%= @group.name%><a href="/group/<%= @group.uuid %>/edit" class='btn btn-info float-right'>Edit</a></h1></div>
             <div class="card-body bg-light">
                 <h4 class="card-title ">
                     <div class="row">
+                        <div class="col-6 text-right">Server Region:</div>
+                        <div class="col-6"> <%= @group.region.upcase%></div>
+                    </div>
+                    <div class="row">
                         <div class="col-6 text-right">Game Mode:</div>
                         <div class="col-6">
-                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= @group.game_mode.present? ? @group.game_mode.name : 'None' %></a>
-                            <div class="dropdown-menu">
-                                <% GameMode.all.each do |cur_mode| %>
-                                    <a class="dropdown-item" href="/group/<%= @group.uuid %>/change_game_mode/<%= cur_mode.id %>"><%= cur_mode.name %></a>
-                                <% end%>
-                            </div>
+                            <%= @group.game_mode.try(:name) or 'None' %>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 text-right">Players:</div>
                         <div class="col-6"> <%= @group.summoner_match_groups.count%> / <%= @group.size%></div>
-                        
                     </div>
                 </h4>
                 <hr>
@@ -32,7 +30,6 @@
                         <div class="col-3"></div>
                         <div class="col-6">
                             <% if @group.summoner_match_groups.count < @group.size %>
-                                
                                 <form class="form-inline" method="post" action="/group/add_summoner" >
                                     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
                                     <%= hidden_field_tag :uuid, @group.uuid %>
@@ -41,8 +38,10 @@
                                     <input class="form-control " required type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name" >
                                     <button class="btn btn-secondary" type="submit">Add</button>
                                 </form>
+                            <% elsif @group.summoner_match_groups.count > @group.size %>
+                                <div class='alert alert-danger text-center'>Too many players in group, please remove at least <strong><%= @group.summoner_match_groups.count - @group.size %></strong></div>
                             <% else %>
-                                    <a href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block">Roll team</a>
+                                <a href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block">Roll team</a>
                             <% end %>
                         </div>
                         <div class="col-3"></div>
@@ -54,14 +53,8 @@
     </div>
     <div class="container-fluid mt-5">
         <div class='row'>
-            <% if @group.summoner_match_groups.count == @group.size %>
-                <% @group.summoner_match_groups.includes(:roll_result).order('roll_results.lane_role_id, roll_results.team').each_with_index do |summoner_match_group,index| %>
-                    <%= render 'summoner_card', :locals => {:index => index, group: @group, summoner_match_group: summoner_match_group } %>
-                <% end %>
-            <% else %>
-                <% @group.summoner_match_groups.each_with_index do |summoner_match_group,index| %>
-                    <%= render 'summoner_card', :locals => {:index => index, group: @group, summoner_match_group: summoner_match_group } %>
-                <% end %>
+            <% @group.summoner_match_groups.order('summoner_match_groups.lane_role_id, summoner_match_groups.team').each_with_index do |summoner_match_group,index| %>
+                <%= render 'summoner_card', :locals => {:index => index, group: @group, summoner_match_group: summoner_match_group } %>
             <% end %>
         </div>
     </div>

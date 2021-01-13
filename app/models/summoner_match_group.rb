@@ -2,13 +2,12 @@ class SummonerMatchGroup < ApplicationRecord
     belongs_to :summoner
     belongs_to :match_group
     has_one :roll_result
+    belongs_to :lane_role, optional: true
     
     def roll_build
-        team = roll_team
-
+        
         is_jungler = false
-        lane_role = roll_lane_role(team)
-        is_jungler = true if lane_role.name == "Jungle"
+        is_jungler = true if self.lane_role.name == "Jungle"
 
         summoner_champion = roll_champ(is_jungler)
 
@@ -22,8 +21,6 @@ class SummonerMatchGroup < ApplicationRecord
 
         roll_data = {
             summoner_match_group_id: self.id,
-            team: "#{team == 1 ? 'Red' : 'Blue' } Team",
-            lane_role_id: lane_role.id,
             champion_id: summoner_champion.champion.id,
             item_build: item_list.join(','),
             summoner_spells: summoner_spell_list.join(','),
@@ -39,31 +36,6 @@ class SummonerMatchGroup < ApplicationRecord
     end
 
     private 
-        def roll_team
-            if self.match_group.team_count == 2 && self.match_group.team1_player_count > self.match_group.team2_player_count
-                team = 2
-                self.match_group.team2_player_count += 1
-            else
-                team = 1
-                self.match_group.team1_player_count += 1
-            end
-
-            team
-        end
-
-        def roll_lane_role(team)
-            # cur_team_filled_roles = self.match_group.filled_roles[:team1] if team == 1
-            # cur_team_filled_roles = self.match_group.filled_roles[:team2] if team == 2
-            
-            lane_role_list = self.match_group.get_allowed_lane_roles(team)
-            offset = rand(lane_role_list.count)
-            lane_role = lane_role_list[offset]
-            self.match_group.remove_lane_role(team,lane_role)
-
-            # cur_team_filled_roles << lane_role.name
-
-            lane_role
-        end
 
         def roll_champ(is_jungler = false)
             offset = rand(self.summoner.summoner_champions.count)
