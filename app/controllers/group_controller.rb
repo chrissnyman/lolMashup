@@ -80,6 +80,8 @@ class GroupController < ApplicationController
         end
     end
 
+    def list
+    end
 
     def add_summoner
         group = MatchGroup.where(uuid: params[:uuid]).first

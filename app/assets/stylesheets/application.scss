@@ -16,18 +16,27 @@
 
  @import '../../../node_modules/bootstrap/scss/bootstrap';
  @import 'superhero.min';
- .fade {
+.fade {
   transition-duration: 0.5s;
 }
- .toast {
+.toast {
   position: absolute; 
   top: 50px;
   right: 0;
   min-width: 250px;
   min-height: 120px;
   margin: 20px
- }
- 
+}
+
+.nav-logo {
+  width: 64px;
+  padding: 0px 10px;
+}
+
+.action-column {
+  max-width: 50px;
+}
+
 .masteries .table thead th {
   text-align: center;
   vertical-align: middle;

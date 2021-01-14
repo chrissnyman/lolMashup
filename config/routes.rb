@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   post 'summoner/' => 'summoner#search'
   get 'summoner/:region/:summoner_name' => 'summoner#overview'
 
+  get 'group/list' => 'group#list'
   get 'group/new' => 'group#new'
   post 'group/create' => 'group#create'
   get 'group/:uuid/edit' => 'group#edit'

@@ -1,0 +1,43 @@
+<%= content_for :head do %>
+    <title>Groups | lol Mashup</title>
+<% end %>
+
+<%= content_for :content do %>
+    <%= render 'shared/navbar' %>
+    <div class="container">
+        <div class="jumbotron">
+            <p class="lead">Available groups: <a class='btn btn-outline btn-primary float-right' href="/group/new">New Group</a> </p>
+            <hr class="my-4">
+            <div class='col'>
+                <table class='table table-hover'>
+                    <thead>
+                        <tr class="table-active">
+                            <th>Name</th>
+                            <th>Region</th>
+                            <th>Mode</th>
+                            <th>Players</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% MatchGroup.all.each do |cur_group| %>
+                            <tr>
+                                <td class='align-middle'><%= cur_group.name %></td>
+                                <td class='align-middle'><%= cur_group.region %></td>
+                                <td class='align-middle'><%= cur_group.game_mode.name %></td>
+                                <td class='align-middle'><%= cur_group.summoner_match_groups.count%> / <%= cur_group.size%></td>
+                                <td class='align-middle action-column'>
+                                    <% if cur_group.summoner_match_groups.count < cur_group.size %>
+                                        <a class="btn btn-secondary btn-sm" href="/group/<%= cur_group.uuid %>">Join</a>
+                                    <% else %>
+                                        <a class="btn btn-secondary btn-sm" href="/group/<%= cur_group.uuid %>">View</a>
+                                    <% end %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<% end %>
