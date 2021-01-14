@@ -23,8 +23,9 @@
                             <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=locals[:summoner_match_group].roll_result.champion.imagename %>" class="img-fluid ">
                             <span class='champ-name'><%= locals[:summoner_match_group].roll_result.champion.name%></span>
                         </div>
-                        <div class='champ-spell'>
-                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=locals[:summoner_match_group].roll_result.champion_spell.imagename %>" class="img-fluid border border-success" data-toggle="tooltip"  title="<%=locals[:summoner_match_group].roll_result.champion_spell.name %>">
+                        <div class='champ-spell' data-toggle="tooltip"  title="<%=locals[:summoner_match_group].roll_result.champion_spell.name %>">
+                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=locals[:summoner_match_group].roll_result.champion_spell.imagename %>" class="img-fluid border border-success">
+                            <span class="button-binding"><%= locals[:summoner_match_group].roll_result.champion_spell.button_binding %></span>
                         </div>
                         <div class="item-spell-section">
                             <div class='item-list'>

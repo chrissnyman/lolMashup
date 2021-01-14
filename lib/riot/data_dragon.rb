@@ -38,15 +38,17 @@ module Riot
         end
 
         def refresh_champion_spells(champ)
+            button_bindings = ['Q','W','E','R']
             # puts "refresh_champion_spells: #{champ}"
             champ_details = get_champion_details(champ.champion_id)
             # passive = champ_details["data"][0]["passive"]
             spells = champ_details["data"][champ.champion_id]["spells"]
-            spells.each do |spell_data|
+            spells.each_with_index do |spell_data, index|
                 spell_obj = {
                   spell_id: spell_data["id"],
                   champion_id: champ.id,
                   name: spell_data["name"],
+                  button_binding: button_bindings[index],
                   imagename: spell_data["image"]["full"],
                 }
                 if ChampionSpell.where(champion_id: spell_obj[:champion_id], spell_id: spell_obj[:spell_id]).count == 1

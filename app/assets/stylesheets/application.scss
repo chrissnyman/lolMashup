@@ -83,10 +83,22 @@
   display: inline-block;
   padding: 0px 10px;
 }
+.summoner-card .champ-spell .button-binding  {
+  display: block;
+  margin-top: -63px;
+  margin-left: 1px;
+  position: relative;
+  padding: 3px 8px;
+  cursor: default;
+  width: fit-content;
+  border-radius: 0px 0px 14px 0px;
+  background-color: #0000008c;
+}
 .summoner-card .champ-skill   {
   width: 70px;
   display: inline-block;
 }
+
 .summoner-card .champ .champ-name  {
   padding: 4px;
   display: block;
