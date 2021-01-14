@@ -18,7 +18,7 @@ class GroupController < ApplicationController
         group_size = 0
         group_size = match_group_params[:size].to_i if match_group_params[:size].present?
 
-        error = MatchGroup.validate_group_mode(match_group_params[:game_mode_id], group_size)
+        error = MatchGroup.validate_group_mode(match_group_params)
         if error == ""
             match = MatchGroup.create!(match_group_params)
             if match.present?
@@ -42,7 +42,7 @@ class GroupController < ApplicationController
         group_size = 0
         group_size = match_group_params[:size].to_i if match_group_params[:size].present?
 
-        error = MatchGroup.validate_group_mode(match_group_params[:game_mode_id], group_size)
+        error = MatchGroup.validate_group_mode(match_group_params)
         if error == ""
             group_match = MatchGroup.where(uuid: params[:uuid]).first
             clear_summoners = false

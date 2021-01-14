@@ -1,2 +1,0 @@
-class SummonerMatch < ApplicationRecord
-end

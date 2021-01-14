@@ -17,7 +17,7 @@
         <div class="card-body">
             <div class="roll-result">
                 <% if locals[:summoner_match_group].roll_result.present? %>
-                    <h4 class="lane-role text-center <%= locals[:summoner_match_group].team == "2" ? 'bg-danger' : 'bg-info' %>"><%= locals[:summoner_match_group].team == "1" ? locals[:summoner_match_group].match_group.team1_name : locals[:summoner_match_group].match_group.team2_name %>: <%= locals[:summoner_match_group].lane_role.try(:name)%></h4>
+                    <h4 class="lane-role text-center <%= locals[:summoner_match_group].team == 2 ? 'bg-danger' : 'bg-info' %>"><%= locals[:summoner_match_group].team == 1 ? locals[:summoner_match_group].match_group.team1_name : locals[:summoner_match_group].match_group.team2_name %>: <%= locals[:summoner_match_group].lane_role.try(:name)%></h4>
                     <div class="build-container">
                         <div class=' champ'>
                             <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=locals[:summoner_match_group].roll_result.champion.imagename %>" class="img-fluid ">

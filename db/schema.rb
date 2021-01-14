@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_13_223133) do
+ActiveRecord::Schema.define(version: 2021_01_14_152121) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 2021_01_13_223133) do
     t.boolean "even_player_count_needed", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "game_modes_rules", id: false, force: :cascade do |t|
+    t.integer "game_mode_id", null: false
+    t.integer "rule_id", null: false
   end
 
   create_table "items", force: :cascade do |t|
@@ -84,6 +89,16 @@ ActiveRecord::Schema.define(version: 2021_01_13_223133) do
     t.string "item_build"
     t.string "rune_build"
     t.string "summoner_spells"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "lane_role_id"
+  end
+
+  create_table "rules", force: :cascade do |t|
+    t.string "name"
+    t.string "check_val"
+    t.string "check_calc"
+    t.boolean "required"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -136,10 +151,10 @@ ActiveRecord::Schema.define(version: 2021_01_13_223133) do
   create_table "summoner_match_groups", force: :cascade do |t|
     t.integer "summoner_id"
     t.integer "match_group_id"
+    t.integer "lane_role_id"
+    t.integer "team"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "lane_role_id"
-    t.string "team"
   end
 
   create_table "summoner_spells", force: :cascade do |t|

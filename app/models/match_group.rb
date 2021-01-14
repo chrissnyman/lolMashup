@@ -124,18 +124,35 @@ class MatchGroup < ApplicationRecord
         team_count
     end
 
-    def self.validate_group_mode(game_mode_id, group_size)
-        error = ""
+    def self.validate_group_mode(match_group_params)
+        errors = []
 
-        if game_mode_id.present?
-            new_mode = GameMode.find(game_mode_id)
-            
-            error = "<strong>#{new_mode.name}</strong> can only be played with an even amount of players" if new_mode.even_player_count_needed and group_size % 2 != 0
-            error = "<strong>#{new_mode.name}</strong> needs a group size of <strong>#{new_mode.min_players}</strong> players" if group_size < new_mode.min_players
+        if match_group_params[:game_mode_id].present?
+            new_mode = GameMode.find(match_group_params[:game_mode_id])
+            new_mode.rules.each do |rule|
+                case rule.check_val
+                    when 'player_count'
+                        check_val = match_group_params[:size].to_i if match_group_params[:size].present?
+                end
+
+                next if check_val.blank?
+
+                calc_parts = rule.check_calc.split(':')
+                case calc_parts[0]
+                    when 'eq_or'
+                        errors << "<strong>#{new_mode.name}</strong> needs a group size of <strong>#{calc_parts[1]}</strong> or <strong>#{calc_parts[2]}</strong> players" if check_val != calc_parts[1].to_i and check_val != calc_parts[2].to_i
+                    when 'min'
+                        errors << "<strong>#{new_mode.name}</strong> needs a group size of <strong>#{calc_parts[1]}</strong> players" if check_val < calc_parts[1].to_i
+                    when 'mod'
+                        mod_reason = "with an <strong>even amount</strong> of players"
+                        mod_reason = "with <strong>multiples of #{calc_parts[1]}<strong> players" if calc_parts[1].to_i != 2
+                        errors << "<strong>#{new_mode.name}</strong> can only be played #{mod_reason} " if check_val % calc_parts[1].to_i != calc_parts[2].to_i
+                end
+            end
         else
-            error = "Invalid game mode selected"
+            errors << "Invalid game mode selected"
         end
 
-        error
+        errors.join('<br>')
     end
 end
