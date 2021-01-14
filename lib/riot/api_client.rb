@@ -41,7 +41,7 @@ module Riot
             end
 
             def perform_call(endpoint,call_type,get_data = {}, post_data = {})
-                cur_url = "#{endpoint}?api_key=#{ENV['RIOT_API_KEY']}"
+                cur_url = "#{endpoint}?api_key=#{Rails.application.credentials.riot_api}"
 
                 get_data.each do |key,val|
                     cur_url +=  "&#{key}=#{val}"
