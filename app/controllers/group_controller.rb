@@ -129,7 +129,7 @@ class GroupController < ApplicationController
             summoner_match_group.roll_build
         end
         @group.update(updated_at: Time.now)
-        redirect_to "/group/#{@group.uuid}"
+        return redirect_to "/group/#{@group.uuid}"
     end
 
     def get_last_updated

@@ -6,7 +6,7 @@
     <%= render 'shared/navbar' %>
     <div class="container">
         <div class="jumbotron">
-            <p class="lead">Available groups: <a class='btn btn-outline btn-primary float-right' href="/group/new">New Group</a> </p>
+            <p class="lead">Available groups: <a class='btn btn-outline btn-primary float-right mdi mdi-vector-polyline-plus' href="/group/new"> New Group</a> </p>
             <hr class="my-4">
             <div class='col'>
                 <table class='table table-hover'>
@@ -28,9 +28,9 @@
                                 <td class='align-middle'><%= cur_group.summoner_match_groups.count%> / <%= cur_group.size%></td>
                                 <td class='align-middle action-column'>
                                     <% if cur_group.summoner_match_groups.count < cur_group.size %>
-                                        <a class="btn btn-secondary btn-sm" href="/group/<%= cur_group.uuid %>">Join</a>
+                                        <a class="btn btn-secondary btn-sm mdi mdi-location-enter" href="/group/<%= cur_group.uuid %>"> Join</a>
                                     <% else %>
-                                        <a class="btn btn-secondary btn-sm" href="/group/<%= cur_group.uuid %>">View</a>
+                                        <a class="btn btn-secondary btn-sm mdi mdi-eye-outline" href="/group/<%= cur_group.uuid %>"> View</a>
                                     <% end %>
                                 </td>
                             </tr>

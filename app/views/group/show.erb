@@ -6,7 +6,7 @@
     <%= render 'shared/navbar' %>
     <div class="container">
         <div class="card border-primary ">
-            <div class="card-header bg-dark"><h1 class='text-center'><%= @group.name%><a href="/group/<%= @group.uuid %>/edit" class='btn btn-info float-right'>Edit</a></h1></div>
+            <div class="card-header bg-dark"><h1 class='text-center'><%= @group.name%><a href="/group/<%= @group.uuid %>/edit" class='btn btn-info float-right mdi mdi-playlist-edit'> Edit</a></h1></div>
             <div class="card-body bg-light">
                 <h4 class="card-title ">
                     <div class="row">
@@ -30,18 +30,18 @@
                         <div class="col-3"></div>
                         <div class="col-6">
                             <% if @group.summoner_match_groups.count < @group.size %>
-                                <form class="form-inline" method="post" action="/group/add_summoner" >
+                                <form id="add-summoner-form" class="form-inline" method="post" action="/group/add_summoner" >
                                     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
                                     <%= hidden_field_tag :uuid, @group.uuid %>
                                     <%= hidden_field_tag :region, @group.region %>
                                     <label class="mr-sm-2" >Add Summoner:</label>
                                     <input class="form-control " required type="text" id="summoner_name" name="summoner_name" placeholder="Summoner Name" >
-                                    <button class="btn btn-secondary" type="submit">Add</button>
+                                    <button  id="add-button" class="btn btn-secondary btn-icon mdi mdi-delete-empty" type="submit"> Add</button>
                                 </form>
                             <% elsif @group.summoner_match_groups.count > @group.size %>
                                 <div class='alert alert-danger text-center'>Too many players in group, please remove at least <strong><%= @group.summoner_match_groups.count - @group.size %></strong></div>
                             <% else %>
-                                <a href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block">Roll team</a>
+                                <a id="roll-button" href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block mdi mdi-paper-roll-outline"> Roll team</a>
                             <% end %>
                         </div>
                         <div class="col-3"></div>
@@ -77,5 +77,16 @@
             }, refresh_delay);
         }
         wait_check_reload();
+
+        $("#roll-button").on('click', function(){
+            $(this).addClass('disabled mdi-loading mdi-spin');
+            $(this).removeClass('mdi-paper-roll-outline');
+            $(this).html(' rolling....')
+        })
+        $("#add-summoner-form").on('submit', function(){
+            $("#add-button").addClass('disabled mdi-loading mdi-spin');
+            $("#add-button").removeClass('mdi-paper-roll-outline');
+            $("#add-button").html(' adding....')
+        })
     </script>
 <% end %>

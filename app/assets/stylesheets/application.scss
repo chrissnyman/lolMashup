@@ -16,9 +16,16 @@
 
  @import '../../../node_modules/bootstrap/scss/bootstrap';
  @import 'superhero.min';
+ 
 .fade {
   transition-duration: 0.5s;
 }
+
+.oof-img {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .toast {
   position: absolute; 
   top: 50px;

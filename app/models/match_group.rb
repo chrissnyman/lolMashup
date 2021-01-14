@@ -115,7 +115,7 @@ class MatchGroup < ApplicationRecord
                 team_count = 2 if self.size > 5
             when 'Custom (No Jungle)'
                 team_count = 2 if self.size > 5
-            when 'Mirrored 5v5'
+            when 'Mirrored'
                 team_count = 2
             when 'Mirrored (No Jungle)'
                 team_count = 2
