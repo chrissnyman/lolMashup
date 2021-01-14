@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_183509) do
+ActiveRecord::Schema.define(version: 2021_01_14_223857) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -131,6 +131,14 @@ ActiveRecord::Schema.define(version: 2021_01_14_183509) do
   create_table "server_regions", force: :cascade do |t|
     t.string "name"
     t.string "region_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "stat_mods", force: :cascade do |t|
+    t.string "name"
+    t.string "icon"
+    t.string "allowed_in_slot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

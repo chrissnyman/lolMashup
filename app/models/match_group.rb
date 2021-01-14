@@ -124,6 +124,20 @@ class MatchGroup < ApplicationRecord
         team_count
     end
 
+    def self.random_roll_message 
+        messages = [
+            'Scanning trashcan...',
+            'Reaching for the depths of depravity...',
+            'Finding worst possible combo...',
+            'Let\'s see you make this work...',
+            'Cooking up some bad soup...',
+            'Calculating worst win rate team...',
+        ]
+        offset = rand(messages.count)
+
+        messages[offset]
+    end
+
     def self.validate_group_mode(match_group_params)
         errors = []
 

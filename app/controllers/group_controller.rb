@@ -73,7 +73,7 @@ class GroupController < ApplicationController
     def show
         @refresh_delay = 2000
         @refresh_delay = 10000 if @group.roll_results.count == @group.size
-        
+        @roll_message = MatchGroup.random_roll_message
         unless @group.present?
             flash[:notice] = {title: "Error", message: "Group not found", class: 'warning'}
             redirect_to "/group/new"

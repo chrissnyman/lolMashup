@@ -6,6 +6,8 @@ class RunePage
         string_obj += "#{self.rune_page[:primary][:rune_tree].id}-#{self.rune_page[:primary][:runes].join(',')}"
         string_obj += "|"
         string_obj += "#{self.rune_page[:secondary][:rune_tree].id}-#{self.rune_page[:secondary][:runes].join(',')}"
+        string_obj += "|"
+        string_obj += "#{self.rune_page[:stat_mods].join(',')}"
 
         string_obj
     end
@@ -30,7 +32,8 @@ class RunePage
             secondary: {
                 rune_tree: secondary_rune_tree,
                 runes: []
-            }
+            },
+            stat_mods: []
         } 
 
         primary_rune_tree.rune_slots.each do |primary_slot|
@@ -51,8 +54,19 @@ class RunePage
         offset = rand(secondary_slot_b.runes.count)
         rune_build[:secondary][:runes] << secondary_slot_b.runes.offset(offset).first.id
 
+        rune_build[:stat_mods] << self.get_random_stat_mod(1)
+        rune_build[:stat_mods] << self.get_random_stat_mod(2)
+        rune_build[:stat_mods] << self.get_random_stat_mod(3)
+
         random_page.rune_page = rune_build
         random_page
+    end
+
+    def self.get_random_stat_mod(slot_num)
+        stat_mods = StatMod.where("allowed_in_slot like '%#{slot_num}%'")
+        offset = rand(stat_mods.count)
+        
+        stat_mods.offset(offset).first.id
     end
 
     def self.from_string(string_obj)
@@ -66,7 +80,8 @@ class RunePage
             secondary: {
                 rune_tree: nil,
                 runes: []
-            }
+            },
+            stat_mods: []
         }
 
         build_parts = string_obj.split('|')
@@ -82,6 +97,10 @@ class RunePage
             rune_build[:secondary][:runes] << Rune.find(rune_id)
         end
         
+        stat_mods = build_parts[2].split(',')
+        stat_mods.each do |stat_mod_id|
+            rune_build[:stat_mods] << StatMod.find(stat_mod_id)
+        end
         
         dats_me.rune_page = rune_build
         dats_me

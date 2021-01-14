@@ -46,3 +46,11 @@ GameMode.create({name: 'Mirrored', rules:[
 GameMode.create({name: 'Mirrored (No Jungle)', rules:[
     Rule.where(name:'player_count_even').first,
 ]})
+
+
+StatMod.create({name: 'Adaptive Force', icon: '/perk-images/StatMods/StatModsAdaptiveForceIcon.png', allowed_in_slot: "1,2"})
+StatMod.create({name: 'Armor', icon: '/perk-images/StatMods/StatModsArmorIcon.png', allowed_in_slot: "2,3"})
+StatMod.create({name: 'Attack Speed', icon: '/perk-images/StatMods/StatModsAttackSpeedIcon.png', allowed_in_slot: "1"})
+StatMod.create({name: 'CDR Scaling', icon: '/perk-images/StatMods/StatModsCDRScalingIcon.png', allowed_in_slot: "1"})
+StatMod.create({name: 'Health Scaling', icon: '/perk-images/StatMods/StatModsHealthScalingIcon.png', allowed_in_slot: "3"})
+StatMod.create({name: 'Magic Resist', icon: '/perk-images/StatMods/StatModsMagicResIcon.png', allowed_in_slot: "2,3"})

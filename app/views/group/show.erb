@@ -81,12 +81,12 @@
         $("#roll-button").on('click', function(){
             $(this).addClass('disabled mdi-loading mdi-spin');
             $(this).removeClass('mdi-paper-roll-outline');
-            $(this).html(' rolling....')
+            $(this).html(" <%= @roll_message %>")
         })
         $("#add-summoner-form").on('submit', function(){
             $("#add-button").addClass('disabled mdi-loading mdi-spin');
             $("#add-button").removeClass('mdi-paper-roll-outline');
-            $("#add-button").html(' adding....')
+            $("#add-button").html(" adding....")
         })
     </script>
 <% end %>

@@ -13,7 +13,7 @@ class SummonerMatchGroup < ApplicationRecord
 
         item_list = roll_item_build(is_jungler)
 
-        champ_spell = roll_champ_spell_list(summoner_champion.champion)
+        champ_spell = roll_champ_spell(summoner_champion.champion)
         
         summoner_spell_list = roll_summoner_spell_list(is_jungler)
 
@@ -45,8 +45,8 @@ class SummonerMatchGroup < ApplicationRecord
             summoner_champion
         end
 
-        def roll_champ_spell_list(champ)
-            champ_spell_list = champ.champion_spells
+        def roll_champ_spell(champ)
+            champ_spell_list = champ.champion_spells.where.not(button_binding: 'R')
             offset = rand(champ_spell_list.count)
             champ_spell = champ_spell_list.offset(offset).first
         end

@@ -51,6 +51,14 @@
                                 <% cur_rune_page.rune_page[:secondary][:runes].each do |cur_rune| %>
                                     <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
                                 <% end %>
+                                <div class='stat-mods'>
+                                    <% cur_rune_page.rune_page[:stat_mods].each_with_index do |cur_stat_mod,index| %>
+                                    <% slot_name = 'Offense' %>
+                                    <% slot_name = 'Flex' if index == 1 %>
+                                    <% slot_name = 'Defense' if index == 2 %>
+                                        <img src="<%= image_url(cur_stat_mod.icon) %>" class="stat-mod-pp" data-toggle="tooltip"  title="<%= "#{slot_name}: #{cur_stat_mod.name}" %>">
+                                    <% end %>
+                                </div>
                             </div>
                         </div>
                     </div>

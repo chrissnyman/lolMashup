@@ -1,0 +1,2 @@
+class StatMod < ApplicationRecord
+end
