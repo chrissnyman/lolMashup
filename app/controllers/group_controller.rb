@@ -1,16 +1,18 @@
 class GroupController < ApplicationController
+    before_action :set_group, :only => [:show,:edit,:roll]
 
     def new
         
         @match_group_params = {
-            name: Spicy::Proton.format('%a %a %n').titleize.gsub(' ',''),
+            name: Spicy::Proton.format('%b %a %n').titleize.gsub(' ',''),
+            team1_name: 'Blue Team',
+            team2_name: 'Red Team',
             region: 'EUW1',
             game_mode_id: GameMode.where(name: 'No Rules').first.id,
             size: 5,
         }
     end
     def edit
-        @group = MatchGroup.where(uuid: params[:uuid]).first
     end
     
     def create
@@ -69,7 +71,6 @@ class GroupController < ApplicationController
     end
 
     def show
-        @group = MatchGroup.where(uuid: params[:uuid]).first
         @refresh_delay = 2000
         @refresh_delay = 10000 if @group.roll_results.count == @group.size
         
@@ -121,13 +122,12 @@ class GroupController < ApplicationController
         redirect_to "/group/#{group.uuid}"
     end
     def roll
-        group = MatchGroup.where(uuid: params[:uuid]).first
-        group.reset
-        group.summoner_match_groups.shuffle.each do |summoner_match_group|
+        @group.reset
+        @group.summoner_match_groups.shuffle.each do |summoner_match_group|
             summoner_match_group.roll_build
         end
-        group.update(updated_at: Time.now)
-        redirect_to "/group/#{group.uuid}"
+        @group.update(updated_at: Time.now)
+        redirect_to "/group/#{@group.uuid}"
     end
 
     def get_last_updated
@@ -141,5 +141,11 @@ class GroupController < ApplicationController
         def match_group_params
             params.permit(:name, :password, :size, :region, :game_mode_id, :team1_name, :team2_name)
         end
+        def set_group
+            @group = MatchGroup.where(uuid: params[:uuid]).first
 
+            unless @group.present?
+                return redirect_to '/group/new', notice: {"title" => "Match Group", "message"=> "Could not find your match group", "class"=>"danger"}
+            end
+        end
 end
