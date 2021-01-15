@@ -159,7 +159,7 @@ class GroupController < ApplicationController
             match_data = ::Riot::ApiClient.new.get_last_match_data(@group.region,@group.summoners.first.riot_account_id, query_start_time)
         end
 
-        @match_champs_data = []
+        @match_player_data = []
         match_data["participantIdentities"].each do |participantIdentity|
             relevant_summoner = @group.summoners.where(riot_id: participantIdentity["player"]["summonerId"]).first
             
@@ -168,15 +168,54 @@ class GroupController < ApplicationController
                 match_data["participants"].each do |participant|
                     participant_data = participant if participant["participantId"] == participantIdentity["participantId"]
                 end
-                @match_champs_data << {
+                @match_player_data << {
                     summoner: relevant_summoner,
                     participantIdentity: participantIdentity,
                     participant_data: participant_data,
+                    metric_score: nil
                 }
             end
         end
+
+        @winner = calculcate_winner
+
         # @full_match_data = match_data
     end
+    
+    def calculcate_winner
+        winner = nil
+        @match_player_data.each do |player_data|
+            if winner.blank?
+                winner = player_data
+            else
+                winner = compare_metric_winner(winner, player_data)
+            end
+        end
+        return winner
+    end
+    
+    def compare_metric_winner(current_winner, cur_player_data)
+        # case @group.win_condition.
+        current_winner_val = current_winner[:participant_data]["stats"][@group.win_condition.condition_metric]
+        cur_player_data_val = cur_player_data[:participant_data]["stats"][@group.win_condition.condition_metric]
+        current_winner[:metric_score] = current_winner_val
+        cur_player_data[:metric_score] = cur_player_data_val
+
+        if @group.win_condition.metric_calc_type == "asc"
+            if current_winner_val < cur_player_data_val
+                return current_winner
+            else 
+                return cur_player_data
+            end
+        else
+            if current_winner_val < cur_player_data_val
+                return current_winner
+            else 
+                return cur_player_data
+            end
+        end
+    end
+
 
     private
         def match_group_params
