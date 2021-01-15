@@ -253,8 +253,12 @@
 }
 
 .winner-card {
-  width: 200px;
+  width: 252px;
   margin: auto;
+  border-width: 3px;
+  border-width: 15px !important;
+  border-radius: 50%;
+  box-shadow: 0px 0px 118px #df691ab8;
 }
 
 .winner-card .profile-pp {
