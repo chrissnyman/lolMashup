@@ -29,7 +29,7 @@
                         </div>
                         <div class="item-spell-section">
                             <% build_parts = locals[:summoner_match_group].roll_result.item_build.split('|') %>
-                            <div class='item-list main-build-items' data-toggle="tooltip"  title="<%=build_parts[0].split(',').count %>">
+                            <div class='item-list main-build-items'>
                                 <div class='first-buy-items border border-success' data-toggle="tooltip" style="width: <%= ((build_parts[0].split(',').count / 2.0).round * 21) +6 %>px">
                                     <% build_parts[0].split(',').each do |item_id| %>
                                         <% cur_item = Item.find(item_id) %>
