@@ -42,7 +42,7 @@ class SummonerMatchGroup < ApplicationRecord
             
             free_champion_ids = ServerRegion.where(region_code: self.match_group.region).first.free_champion_ids.split(',')
             champ_ids = free_champion_ids + self.summoner.summoner_champions.pluck(:champion_id)
-            
+
             champ_ids = champ_ids + mirror_with_summoner_match_group.summoner.summoner_champions.pluck(:champion_id) if mirror_with_summoner_match_group.present?
             
             champ_list = Champion.where("id in (#{champ_ids.join(',')})")
@@ -63,20 +63,25 @@ class SummonerMatchGroup < ApplicationRecord
             item_list = []
             moola = 500
 
+            vision_item_list = Item.where(purchasable: true).where("name in ('Stealth Ward','Oracle Lens')")
+            offset = rand(vision_item_list.count)
+            vision_item = vision_item_list.offset(offset).first
+            item_list << vision_item.id
+
             if is_jungler
                 jungle_item_list = Item.where(tags: '["LifeSteal", "SpellVamp", "Jungle"]')
                 offset = rand(jungle_item_list.count)
                 jungle_item = jungle_item_list.offset(offset).first
                 moola -= jungle_item.gold
 
-                item_list.unshift(jungle_item.id)
+                item_list << jungle_item.id
             else
                 starting_item_list = Item.where("tags like '%\"Lane\"%' and tags not like '%\"Trinket\"%'").where(purchasable: true)
                 offset = rand(starting_item_list.count)
                 starting_item = starting_item_list.offset(offset).first
                 moola -= starting_item.gold
 
-                item_list.unshift(starting_item.id)
+                item_list << starting_item.id
             end
 
             while moola > 0 do

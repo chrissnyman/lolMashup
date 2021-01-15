@@ -41,7 +41,7 @@ class RunePage
             rune_build[:primary][:runes] << primary_slot.runes.offset(offset).first.id
         end
 
-        secondary_slot_offset_a = rand(secondary_rune_tree.rune_slots.count)
+        secondary_slot_offset_a = rand(secondary_rune_tree.rune_slots.count-1) + 1
         secondary_slot_a = secondary_rune_tree.rune_slots.offset(secondary_slot_offset_a).first
         secondary_slot_offset_b = rand(secondary_rune_tree.rune_slots.count)
         while secondary_slot_offset_b == secondary_slot_offset_a do
