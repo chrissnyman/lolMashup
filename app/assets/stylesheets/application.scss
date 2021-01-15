@@ -258,7 +258,13 @@
   border-width: 3px;
   border-width: 15px !important;
   border-radius: 50%;
-  box-shadow: 0px 0px 118px #df691ab8;
+  box-shadow: 0px 0px 40px #df691ab8;
+}
+
+.winner-card .win-condition-title {
+  width: 350px;
+  display: inline-block;
+  margin-left: -64px;
 }
 
 .winner-card .profile-pp {
