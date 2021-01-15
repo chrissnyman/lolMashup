@@ -75,17 +75,12 @@ class SummonerMatchGroup < ApplicationRecord
                 moola -= jungle_item.gold
 
                 item_list << jungle_item.id
-            else
-                starting_item_list = Item.where("tags like '%\"Lane\"%' and tags not like '%\"Trinket\"%'").where(purchasable: true)
-                offset = rand(starting_item_list.count)
-                starting_item = starting_item_list.offset(offset).first
-                moola -= starting_item.gold
-
-                item_list << starting_item.id
             end
 
             while moola > 0 do
                 starting_item_list = Item.where(purchasable: true).where("gold > 0 and gold <= #{moola} and tags not like '%\"Trinket\"%' and (depth < 2 or depth is null)")
+                starting_item_list = starting_item_list.where.not("name in ('Refillable Potion','Corrupting Potion')") if item_list.include? 2003
+                starting_item_list = starting_item_list.where.not("tags like '%Consumable%' and tags like'%HealthRegen%'") if item_list.include? 2031 or item_list.include? 2033
                 if starting_item_list.count > 0
                     offset = rand(starting_item_list.count)
                     starting_item = starting_item_list.offset(offset).first
