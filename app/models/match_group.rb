@@ -3,6 +3,7 @@ class MatchGroup < ApplicationRecord
     has_many :summoner_match_groups
     has_many :summoners, :through => :summoner_match_groups
     has_many :roll_results, :through => :summoner_match_groups
+    belongs_to :win_condition, optional: true
 
     before_create :set_uuid
 
@@ -25,6 +26,8 @@ class MatchGroup < ApplicationRecord
         self.available_roles = get_available_lane_roles
         self.team1_player_count = 0
         self.team2_player_count = 0
+        self.update(win_condition_id: roll_win_condition.id)
+
         
         self.summoner_match_groups.each do |summoner_match_group|
             team = roll_next_team
@@ -35,6 +38,12 @@ class MatchGroup < ApplicationRecord
             summoner_match_group.roll_result_id = nil
             summoner_match_group.save!
         end
+    end
+
+    def roll_win_condition
+        win_condition_list = WinCondition.all
+        offset = rand(win_condition_list.count)
+        win_condition = win_condition_list.offset(offset).first
     end
 
     def roll_next_team

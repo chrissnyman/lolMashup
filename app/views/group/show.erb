@@ -41,7 +41,7 @@
                             <% elsif @group.summoner_match_groups.count > @group.size %>
                                 <div class='alert alert-danger text-center'>Too many players in group, please remove at least <strong><%= @group.summoner_match_groups.count - @group.size %></strong></div>
                             <% else %>
-                                <a id="roll-button" href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block mdi mdi-paper-roll-outline"> Roll team</a>
+                                <a id="roll-button" href="/group/<%= @group.uuid %>/roll" class="btn btn-primary btn-block mdi mdi-paper-roll-outline"> Roll</a>
                             <% end %>
                         </div>
                         <div class="col-3"></div>
@@ -53,6 +53,29 @@
     </div>
     <div class="container-fluid mt-5">
         <div class='row'>
+            <% if @group.win_condition.present? %>
+                <div class="container">
+                    <div class='row'>
+                        <div class="col"></div>
+                        <div class="col-8">
+                            <div class="card border-primary win-condition-card">
+                                <div class="card-header bg-dark">
+                                    <span class="win-condition-label">Win Condition</span>
+                                    <h1 class='text-center win-condition-title'><%= @group.win_condition.title %></h1>
+                                    <img src="<%= image_url('win-ribbon.png') %>" class="win-condition-medal">
+                                </div>
+                                <div class="card-body bg-light d-none">
+                                    <p class="card-text ">
+                                                <p><%= @group.win_condition.description %></p>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            <% end %>
+
             <% @group.summoner_match_groups.order('summoner_match_groups.lane_role_id, summoner_match_groups.roll_result_id, summoner_match_groups.team').each_with_index do |summoner_match_group,index| %>
                 <%= render 'summoner_card', :locals => {:index => index, group: @group, summoner_match_group: summoner_match_group } %>
             <% end %>

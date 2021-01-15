@@ -55,14 +55,53 @@
 .masteries .champ-name {
   padding-left: 8px;
 }
- 
+
+.win-condition-card {
+  width: 320px;
+  margin: auto;
+  height: 320px;
+  border-radius: 50%;
+  margin-bottom: 40px;
+  overflow: hidden;
+  border-width: 10px;
+  box-shadow: 0px 0px 118px #df691ab8;
+}
+
+.win-condition-card .card-header {
+  height: 100%;
+  align-items: center;
+  display: flex;
+}
+.win-condition-card .win-condition-label {
+  position: absolute;
+  top: 24px;
+  left: 65px;
+  font-size: 27px;
+}
+.win-condition-card .win-condition-title {
+  font-size: 30px;
+  text-shadow: 0px 0px 15px black;
+  z-index: 10;
+  
+  width: 100%;
+}
+.win-condition-card .win-condition-medal {
+  position: absolute;
+  top: 126px;
+  width: 98%;
+  left: 1%;
+}
 .summoner-card {
-  margin-bottom: 20px;
+    width: 625px;
+    margin-bottom: 20px;
+}
+@media (max-width:1200px) {
+  .summoner-card {
+    margin: auto;
+    margin-bottom: 20px;
+  }
 }
 @media (min-width:1200px) {
-  .summoner-card {
-    width: 600px;
-  }
   .summoner-card-right {
     float: right !important;
   }
@@ -124,7 +163,7 @@
 }
 .summoner-card .item-spell-section   {
   display: inline-block;
-  width: 358px;
+  width: 380px;
 }
 .summoner-card .build-container   {
   padding: 0px 12px;

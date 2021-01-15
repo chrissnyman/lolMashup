@@ -1,0 +1,2 @@
+class WinCondition < ApplicationRecord
+end
