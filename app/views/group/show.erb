@@ -53,7 +53,7 @@
     </div>
     <div class="container-fluid mt-5">
         <div class='row'>
-            <% @group.summoner_match_groups.order('summoner_match_groups.lane_role_id, summoner_match_groups.team').each_with_index do |summoner_match_group,index| %>
+            <% @group.summoner_match_groups.order('summoner_match_groups.lane_role_id, summoner_match_groups.roll_result_id, summoner_match_groups.team').each_with_index do |summoner_match_group,index| %>
                 <%= render 'summoner_card', :locals => {:index => index, group: @group, summoner_match_group: summoner_match_group } %>
             <% end %>
         </div>
