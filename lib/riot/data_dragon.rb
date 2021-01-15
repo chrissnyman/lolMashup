@@ -94,7 +94,7 @@ module Riot
                     from: item_data["from"],
                     # maps: item_data["maps"],
                     # title: item_data["title"],
-                    gold: item_data["gold"]["base"],
+                    gold: item_data["gold"]["total"],
                     purchasable: item_data["gold"]["purchasable"],
                 }
                 if Item.where(id: item_obj[:id]).count == 1
