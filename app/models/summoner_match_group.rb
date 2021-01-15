@@ -39,19 +39,18 @@ class SummonerMatchGroup < ApplicationRecord
     private
 
         def roll_champ(is_jungler = false, mirror_with_summoner_match_group = nil)
-            champ_list = build_champ_list(self.summoner.summoner_champions,mirror_with_summoner_match_group.summoner.summoner_champions) if mirror_with_summoner_match_group.present?
+            
+            free_champion_ids = ServerRegion.where(region_code: self.match_group.region).first.free_champion_ids.split(',')
+            champ_ids = free_champion_ids + self.summoner.summoner_champions.pluck(:champion_id)
+            
+            champ_ids = champ_ids + mirror_with_summoner_match_group.summoner.summoner_champions.pluck(:champion_id) if mirror_with_summoner_match_group.present?
+            
+            champ_list = Champion.where("id in (#{champ_ids.join(',')})")
 
             offset = rand(champ_list.count)
             summoner_champion = champ_list.offset(offset).first
 
             summoner_champion
-        end
-
-        def build_champ_list(champ_list,other_summoner_champions)
-            free_champion_ids = ServerRegion.where(region_code: self.match_group.region).first.free_champion_ids.split(',')
-            champ_ids = free_champion_ids + champ_list.pluck(:champion_id) + other_summoner_champions.pluck(:champion_id)
-            
-            Champion.where("id in (#{champ_ids.join(',')})")
         end
 
         def roll_champ_spell(champ)
