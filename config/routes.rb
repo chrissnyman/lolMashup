@@ -18,5 +18,6 @@ Rails.application.routes.draw do
   get 'group/:uuid/roll' => 'group#roll'
   get 'group/:uuid/last_updated' => 'group#get_last_updated'
   get 'group/:uuid/post_match_results' => 'group#post_match_results'
+  get 'group/:uuid/post_match_results/:game_id' => 'group#post_match_results'
   
 end

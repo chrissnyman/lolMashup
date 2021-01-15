@@ -6,7 +6,7 @@ class Summoner < ApplicationRecord
 
     def self.load_summoner(region, summoner_name)
         summoner = Summoner.where(name:summoner_name, region: region).first
-        if summoner.present? and summoner.updated_at > Time.now - 6.hour
+        if summoner.present? #and summoner.updated_at > Time.now - 24.hour
             summoner
         else
             fresh_summoner_data = ::Riot::ApiClient.new.get_summoner_data(region,summoner_name)

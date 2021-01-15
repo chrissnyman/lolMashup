@@ -151,8 +151,13 @@ class GroupController < ApplicationController
     end
     
     def post_match_results
-        query_start_time = (Time.now - 24.hour).to_i * 1000
-        match_data = ::Riot::ApiClient.new.get_last_match_data(@group.region,@group.summoners.first.riot_account_id, query_start_time)
+        if params[:game_id].present?
+            match_data = ::Riot::ApiClient.new.get_match_details(@group.region,params[:game_id])
+
+        else
+            query_start_time = (Time.now - 24.hour).to_i * 1000
+            match_data = ::Riot::ApiClient.new.get_last_match_data(@group.region,@group.summoners.first.riot_account_id, query_start_time)
+        end
 
         @match_champs_data = []
         match_data["participantIdentities"].each do |participantIdentity|
