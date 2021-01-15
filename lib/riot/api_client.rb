@@ -25,6 +25,26 @@ module Riot
             perform_call(endpoint,'get')
         end
         
+        def get_recent_matches(region,encryptedAccountId, beginTime)
+            endpoint = "https://#{api_url(region)}/lol/match/v4/matchlists/by-account/#{encryptedAccountId}"
+
+            perform_call(endpoint,'get', {beginTime: beginTime })
+        end
+        
+        def get_match_details(region,matchId)
+            endpoint = "https://#{api_url(region)}/lol/match/v4/matches/#{matchId}"
+
+            perform_call(endpoint,'get')
+        end
+
+        def get_last_match_data(region,encryptedAccountId, beginTime)
+            recent_matches = get_recent_matches(region,encryptedAccountId, beginTime)
+            last_match_id = recent_matches["matches"].first["gameId"]
+            latest_match = get_match_details(region,recent_matches["matches"].first["gameId"])
+
+            latest_match
+        end
+
         private
             def api_url_list
                 {

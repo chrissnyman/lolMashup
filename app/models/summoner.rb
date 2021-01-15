@@ -51,6 +51,7 @@ class Summoner < ApplicationRecord
                 summoner_level: summoner_data["summonerLevel"],
                 region: region,
                 riot_id: summoner_data["id"],
+                riot_account_id: summoner_data["accountId"],
             }
 
             existing_summoner = Summoner.where(name:summoner_obj[:name], region: summoner_obj[:region]).first

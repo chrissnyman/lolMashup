@@ -66,8 +66,11 @@
                                 </div>
                                 <div class="card-body bg-light d-none">
                                     <p class="card-text ">
-                                                <p><%= @group.win_condition.description %></p>
+                                        <p><%= @group.win_condition.description %></p>
                                     </p>
+                                </div>
+                                <div class='match-result-button text-center'>
+                                    <a class="btn btn-block btn-secondary" href="/group/<%= @group.uuid %>/post_match_results" data-toggle="tooltip"  title="Results may take a while to be available after match has completed">View Match results</a>
                                 </div>
                             </div>
                         </div>

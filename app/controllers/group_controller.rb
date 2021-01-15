@@ -1,5 +1,5 @@
 class GroupController < ApplicationController
-    before_action :set_group, :only => [:show,:edit,:roll]
+    before_action :set_group, :only => [:show,:edit,:roll, :post_match_results]
 
     def new
         
@@ -12,6 +12,7 @@ class GroupController < ApplicationController
             size: 5,
         }
     end
+    
     def edit
     end
     
@@ -107,6 +108,7 @@ class GroupController < ApplicationController
 
         redirect_to "/group/#{group.uuid}"
     end
+    
     def remove_summoner
         group = MatchGroup.where(uuid: params[:uuid]).first
         summoner_match_group = group.summoner_match_groups.where(id: params[:summoner_match_group_id]).first
@@ -123,6 +125,7 @@ class GroupController < ApplicationController
 
         redirect_to "/group/#{group.uuid}"
     end
+    
     def roll
         @group.reset
         if @group.is_mirrored?
@@ -147,6 +150,29 @@ class GroupController < ApplicationController
         render json: group.updated_at.to_i
     end
     
+    def post_match_results
+        query_start_time = (Time.now - 24.hour).to_i * 1000
+        match_data = ::Riot::ApiClient.new.get_last_match_data(@group.region,@group.summoners.first.riot_account_id, query_start_time)
+
+        @match_champs_data = []
+        match_data["participantIdentities"].each do |participantIdentity|
+            relevant_summoner = @group.summoners.where(riot_id: participantIdentity["player"]["summonerId"]).first
+            
+            if relevant_summoner.present?
+                participant_data = nil
+                match_data["participants"].each do |participant|
+                    participant_data = participant if participant["participantId"] == participantIdentity["participantId"]
+                end
+                @match_champs_data << {
+                    summoner: relevant_summoner,
+                    participantIdentity: participantIdentity,
+                    participant_data: participant_data,
+                }
+            end
+        end
+        @full_match_data = match_data
+    end
+
     private
         def match_group_params
             params.permit(:name, :password, :size, :region, :game_mode_id, :team1_name, :team2_name)

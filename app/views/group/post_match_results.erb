@@ -1,0 +1,110 @@
+<%= content_for :head do %>
+    <title>lol Mashup | Group Info</title>
+<% end %>
+
+<%= content_for :content do %>
+    <%= render 'shared/navbar' %>
+    <div class="container-fluid">
+        <div class="card border-primary ">
+            <div class="card-header bg-dark"><h1 class='text-center'><%= @group.name%></h1></div>
+            <div class="card-body bg-light">
+                <h4 class="card-title text-center">
+                    Match Results
+                </h4>
+                <hr>
+                <p class="card-text ">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th data-toggle='tooltip'  title='Summoner'><i class='mdi mdi-card-account-details'></i></th>
+                                <th data-toggle='tooltip'  title='win'><i class='mdi mdi-trophy'></i></th>
+                                <th data-toggle='tooltip'  title='items'><i class='mdi mdi-format-list-numbered'></i></th>
+                                <th data-toggle='tooltip'  title='kda'><i class='mdi mdi-chart-line-variant'></i></th>
+                                <th data-toggle='tooltip'  title='largestKillingSpree'><i class='mdi mdi-account-multiple-remove-outline'></i></th>
+                                <th data-toggle='tooltip'  title='largestMultiKill'><i class='mdi mdi-account-multiple-remove-outline'></i></th>
+                                <th data-toggle='tooltip'  title='killingSprees'><i class='mdi mdi-account-multiple-remove-outline'></i></th>
+                                <th data-toggle='tooltip'  title='longestTimeSpentLiving'><i class='mdi mdi-help'></i></th>
+                                <th data-toggle='tooltip'  title='doubleKills'><i class='mdi mdi-numeric-2'></i></th>
+                                <th data-toggle='tooltip'  title='tripleKills'><i class='mdi mdi-numeric-3'></i></th>
+                                <th data-toggle='tooltip'  title='quadraKills'><i class='mdi mdi-numeric-4'></i></th>
+                                <th data-toggle='tooltip'  title='pentaKills'><i class='mdi mdi-numeric-5'></i></th>
+                                <th data-toggle='tooltip'  title='unrealKills'><i class='mdi mdi-skull'></i></th>
+                                <th data-toggle='tooltip'  title='totalDamageDealt'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='totalDamageDealtToChampions'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='damageDealtToObjectives'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='damageDealtToTurrets'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='visionScore'><i class='mdi mdi-eye'></i></th>
+                                <th data-toggle='tooltip'  title='timeCCingOthers'><i class='mdi mdi-timer-sand'></i></th>
+                                <th data-toggle='tooltip'  title='totalDamageTaken'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='goldEarned'><i class='mdi mdi-cash-usd-outline'></i></th>
+                                <th data-toggle='tooltip'  title='goldSpent'><i class='mdi mdi-cash-usd-outline'></i></th>
+                                <th data-toggle='tooltip'  title='turretKills'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='inhibitorKills'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='totalMinionsKilled'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='neutralMinionsKilled'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='neutralMinionsKilledTeamJungle'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='neutralMinionsKilledEnemyJungle'><i class='mdi mdi-pistol'></i></th>
+                                <th data-toggle='tooltip'  title='totalTimeCrowdControlDealt'><i class='mdi mdi-timer-sand'></i></th>
+                                <th data-toggle='tooltip'  title='champLevel'><i class='mdi mdi-chart-line-variant'></i></th>
+                            </tr>
+                        </thead>
+                        <body>
+                            <% @match_champs_data.each do |match_champ_data| %>
+                                    <tr>
+                                        <td><%= match_champ_data[:summoner].name %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["win"] %></td>
+                                        <td>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item0"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item1"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item2"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item3"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item4"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item5"]) %>
+                                            <%= raw item_image(match_champ_data[:participant_data]["stats"]["item6"]) %>
+                                        </td>
+                                        <td>
+                                            <%= match_champ_data[:participant_data]["stats"]["kills"] %> /
+                                            <%= match_champ_data[:participant_data]["stats"]["deaths"] %> /
+                                            <%= match_champ_data[:participant_data]["stats"]["assists"] %>
+                                        </td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["largestKillingSpree"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["largestMultiKill"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["killingSprees"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["longestTimeSpentLiving"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["doubleKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["tripleKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["quadraKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["pentaKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["unrealKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["totalDamageDealt"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["totalDamageDealtToChampions"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["damageDealtToObjectives"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["damageDealtToTurrets"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["visionScore"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["timeCCingOthers"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["totalDamageTaken"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["goldEarned"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["goldSpent"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["turretKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["inhibitorKills"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["totalMinionsKilled"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["neutralMinionsKilled"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["neutralMinionsKilledTeamJungle"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["neutralMinionsKilledEnemyJungle"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["totalTimeCrowdControlDealt"] %></td>
+                                        <td><%= match_champ_data[:participant_data]["stats"]["champLevel"] %></td>
+                                    </tr>
+                            <% end %>
+                        </body>
+                    </table>
+                    
+                    <div class="row">
+                        <pre><%= raw JSON.pretty_generate(@full_match_data) %>
+                        </pre>
+                    </div>
+                </p>
+            </div>
+        </div>
+        <%= render 'shared/notices' %>
+    </div>
+<% end %>
