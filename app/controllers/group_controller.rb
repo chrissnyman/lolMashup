@@ -175,7 +175,7 @@ class GroupController < ApplicationController
                 }
             end
         end
-        @full_match_data = match_data
+        # @full_match_data = match_data
     end
 
     private
