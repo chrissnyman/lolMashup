@@ -91,7 +91,6 @@ ActiveRecord::Schema.define(version: 2021_01_15_001641) do
     t.string "summoner_spells"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "lane_role_id"
   end
 
   create_table "rules", force: :cascade do |t|
@@ -160,10 +159,10 @@ ActiveRecord::Schema.define(version: 2021_01_15_001641) do
   create_table "summoner_match_groups", force: :cascade do |t|
     t.integer "summoner_id"
     t.integer "match_group_id"
-    t.integer "lane_role_id"
-    t.integer "team"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "lane_role_id"
+    t.string "team"
     t.integer "roll_result_id"
   end
 
