@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_15_001641) do
+ActiveRecord::Schema.define(version: 2021_01_15_143227) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -58,10 +58,10 @@ ActiveRecord::Schema.define(version: 2021_01_15_001641) do
     t.string "from"
     t.string "maps"
     t.string "title"
-    t.string "gold"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "purchasable"
+    t.integer "gold"
   end
 
   create_table "lane_roles", force: :cascade do |t|
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2021_01_15_001641) do
     t.string "summoner_spells"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "lane_role_id"
   end
 
   create_table "rules", force: :cascade do |t|
@@ -159,10 +160,10 @@ ActiveRecord::Schema.define(version: 2021_01_15_001641) do
   create_table "summoner_match_groups", force: :cascade do |t|
     t.integer "summoner_id"
     t.integer "match_group_id"
+    t.integer "lane_role_id"
+    t.integer "team"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "lane_role_id"
-    t.string "team"
     t.integer "roll_result_id"
   end
 

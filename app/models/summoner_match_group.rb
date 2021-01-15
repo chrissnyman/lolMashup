@@ -11,7 +11,8 @@ class SummonerMatchGroup < ApplicationRecord
 
         champion = roll_champ(is_jungler,mirror_with_summoner_match_group)
 
-        item_list = roll_item_build(is_jungler)
+        first_buy_item_list = roll_first_buy_items(is_jungler)
+        item_list = roll_item_build
 
         champ_spell = roll_champ_spell(champion)
         
@@ -21,7 +22,7 @@ class SummonerMatchGroup < ApplicationRecord
 
         roll_data = {
             champion_id: champion.id,
-            item_build: item_list.join(','),
+            item_build: "#{first_buy_item_list.join(',')}|#{item_list.join(',')}",
             summoner_spells: summoner_spell_list.join(','),
             champion_spell_id: champ_spell.id,
             rune_build: rune_page.stringify,
@@ -59,7 +60,43 @@ class SummonerMatchGroup < ApplicationRecord
             champ_spell = champ_spell_list.offset(offset).first
         end
 
-        def roll_item_build(is_jungler = false)
+        def roll_first_buy_items(is_jungler = false)
+            item_list = []
+            moola = 500
+
+            if is_jungler
+                jungle_item_list = Item.where(tags: '["LifeSteal", "SpellVamp", "Jungle"]')
+                offset = rand(jungle_item_list.count)
+                jungle_item = jungle_item_list.offset(offset).first
+                moola -= jungle_item.gold
+
+                item_list.unshift(jungle_item.id)
+            else
+                starting_item_list = Item.where("tags like '%\"Lane\"%' and tags not like '%\"Trinket\"%'").where(purchasable: true)
+                offset = rand(starting_item_list.count)
+                starting_item = starting_item_list.offset(offset).first
+                moola -= starting_item.gold
+
+                item_list.unshift(starting_item.id)
+            end
+
+            while moola > 0 do
+                starting_item_list = Item.where(purchasable: true).where("gold > 0 and gold <= #{moola} and tags not like '%\"Trinket\"%' and (depth < 2 or depth is null)")
+                if starting_item_list.count > 0
+                    offset = rand(starting_item_list.count)
+                    starting_item = starting_item_list.offset(offset).first
+                    moola -= starting_item.gold
+
+                    item_list << starting_item.id
+                else
+                    moola = 0
+                end
+            end
+
+            item_list
+        end
+
+        def roll_item_build
             item_limit = 6
             item_list = []
     
@@ -82,20 +119,6 @@ class SummonerMatchGroup < ApplicationRecord
                 item_list << next_item_id
             end
             item_list.shuffle!
-
-            if is_jungler
-                jungle_item_list = Item.where(tags: '["LifeSteal", "SpellVamp", "Jungle"]')
-                offset = rand(jungle_item_list.count)
-                jungle_item_id = jungle_item_list.offset(offset).first.id
-
-                item_list.unshift(jungle_item_id)
-            else
-                starting_item_list = Item.where("tags like '%\"Lane\"%' and tags not like '%\"Vision\"%'").where(purchasable: true)
-                offset = rand(starting_item_list.count)
-                starting_item_id = starting_item_list.offset(offset).first.id
-
-                item_list.unshift(starting_item_id)
-            end
 
             item_list
         end

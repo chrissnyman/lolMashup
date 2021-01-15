@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'group/:uuid/edit' => 'group#edit'
   post 'group/update' => 'group#update'
   post 'group/add_summoner' => 'group#add_summoner'
-  get 'group/:uuid/remove_summoner/:summoner_match_group_id' => 'group#add_summoner'
+  get 'group/:uuid/remove_summoner/:summoner_match_group_id' => 'group#remove_summoner'
   get 'group/:uuid' => 'group#show'
   get 'group/:uuid/roll' => 'group#roll'
   get 'group/:uuid/last_updated' => 'group#get_last_updated'

@@ -128,18 +128,32 @@
 }
 .summoner-card .build-container   {
   padding: 0px 12px;
-  height: 162px;
+  height: 160px;
 }
 
 .summoner-card .build-container *  {
   vertical-align: top;
 }
-.summoner-card .item-list   {
+.summoner-card .item-list  {
   display: block;
   width: 420px;
+}
+
+.summoner-card .item-list .first-buy-items   {
+  display: inline-flex;
+  height: 48px;
+  flex-flow: column wrap;
+  border-width: 3px !important;
+  background-color: black;
+}
+.summoner-card .item-list .first-buy-items > .item-pp   {
+  width: 21px;
+  border-radius: 50%;
+}
+.summoner-card .item-list.main-build-items   {
   height: 50px;
 }
-.summoner-card .item-list .item-pp   {
+.summoner-card .item-list.main-build-items > .item-pp   {
   width: 48px;
   border-width: 3px !important;
 }
