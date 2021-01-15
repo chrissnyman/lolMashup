@@ -125,8 +125,16 @@ class GroupController < ApplicationController
     end
     def roll
         @group.reset
-        @group.summoner_match_groups.shuffle.each do |summoner_match_group|
-            summoner_match_group.roll_build
+        if @group.is_mirrored?
+            @group.summoner_match_groups.where(team: 1).each  do |summoner_match_group|
+                mirror_with_summoner_match_group = @group.summoner_match_groups.where(team: 2, lane_role_id: summoner_match_group.lane_role_id, roll_result_id: nil).first
+                summoner_match_group.roll_build(mirror_with_summoner_match_group)
+                mirror_with_summoner_match_group.update(roll_result_id: summoner_match_group.roll_result_id)
+            end
+        else
+            @group.summoner_match_groups.shuffle.each do |summoner_match_group|
+                summoner_match_group.roll_build
+            end
         end
         @group.update(updated_at: Time.now)
         return redirect_to "/group/#{@group.uuid}"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_223857) do
+ActiveRecord::Schema.define(version: 2021_01_15_001641) do
 
   create_table "champion_spells", force: :cascade do |t|
     t.integer "champion_id"
@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(version: 2021_01_14_223857) do
   end
 
   create_table "roll_results", force: :cascade do |t|
-    t.integer "summoner_match_group_id"
     t.integer "champion_id"
     t.integer "champion_spell_id"
     t.string "item_build"
@@ -133,6 +132,7 @@ ActiveRecord::Schema.define(version: 2021_01_14_223857) do
     t.string "region_code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "free_champion_ids"
   end
 
   create_table "stat_mods", force: :cascade do |t|
@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(version: 2021_01_14_223857) do
     t.integer "team"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "roll_result_id"
   end
 
   create_table "summoner_spells", force: :cascade do |t|

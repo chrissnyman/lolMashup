@@ -3,9 +3,16 @@ require 'httparty'
 
 module Riot
     class DataDragon
+        attr_accessor :meta_version
         
         def initialize(meta_version = nil)
-            @meta_version = meta_version
+            self.meta_version = meta_version
+        end
+        
+        def check_latest_version
+            versions = get_latest_versions
+
+            self.meta_version = versions[0]
         end
 
         def refresh_champion_list
@@ -59,6 +66,10 @@ module Riot
                     ChampionSpell.create(spell_obj)
                 end
             end
+        end
+        
+        def refresh_free_champion_rotation
+            free_champs = free_champion_rotation
         end
         
         def refresh_item_list
@@ -171,8 +182,8 @@ module Riot
 
         private
             def current_meta_version
-                @meta_version if @meta_version.present?
-                '11.1.1' unless @meta_version.present?
+                return self.meta_version if self.meta_version.present?
+                return '11.1.1' unless self.meta_version.present?
             end
             
             def api_url
@@ -181,6 +192,11 @@ module Riot
 
             def get_champions
                 perform_call("#{api_url}/champion.json",'get')
+            end
+
+
+            def get_latest_versions
+                perform_call("https://ddragon.leagueoflegends.com/api/versions.json",'get')
             end
 
             def get_champion_details(champion_id)

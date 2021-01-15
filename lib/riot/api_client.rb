@@ -18,6 +18,12 @@ module Riot
 
             perform_call(endpoint,'get')
         end
+
+        def get_free_champion_rotation(region)
+            endpoint = "https://#{api_url(region)}/lol/platform/v3/champion-rotations"
+
+            perform_call(endpoint,'get')
+        end
         
         private
             def api_url_list

@@ -2,6 +2,8 @@ task :refresh_metadata, [:meta_version] => [:environment] do |task,args|
     
     ddragon = ::Riot::DataDragon.new
 
+    ddragon.check_latest_version
+    
     ddragon.refresh_champion_list
 
     ddragon.refresh_item_list

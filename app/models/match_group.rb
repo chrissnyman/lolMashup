@@ -29,7 +29,11 @@ class MatchGroup < ApplicationRecord
         self.summoner_match_groups.each do |summoner_match_group|
             team = roll_next_team
             lane_role = roll_lane_role(team)
-            summoner_match_group.update!(lane_role_id: lane_role.id, team: team)
+
+            summoner_match_group.team = team
+            summoner_match_group.lane_role_id = lane_role.id
+            summoner_match_group.roll_result_id = nil
+            summoner_match_group.save!
         end
     end
 
@@ -100,6 +104,10 @@ class MatchGroup < ApplicationRecord
         end
         
         allowed_lane_roles
+    end
+
+    def is_mirrored?
+        self.game_mode.name.include? 'Mirrored'
     end
     
     def get_team_count

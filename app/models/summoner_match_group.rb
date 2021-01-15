@@ -1,27 +1,26 @@
 class SummonerMatchGroup < ApplicationRecord
     belongs_to :summoner
     belongs_to :match_group
-    has_one :roll_result
+    belongs_to :roll_result, optional: true
     belongs_to :lane_role, optional: true
     
-    def roll_build
+    def roll_build(mirror_with_summoner_match_group = nil)
         
         is_jungler = false
         is_jungler = true if self.lane_role.name == "Jungle"
 
-        summoner_champion = roll_champ(is_jungler)
+        champion = roll_champ(is_jungler,mirror_with_summoner_match_group)
 
         item_list = roll_item_build(is_jungler)
 
-        champ_spell = roll_champ_spell(summoner_champion.champion)
+        champ_spell = roll_champ_spell(champion)
         
         summoner_spell_list = roll_summoner_spell_list(is_jungler)
 
         rune_page = RunePage.build_random_page
 
         roll_data = {
-            summoner_match_group_id: self.id,
-            champion_id: summoner_champion.champion.id,
+            champion_id: champion.id,
             item_build: item_list.join(','),
             summoner_spells: summoner_spell_list.join(','),
             champion_spell_id: champ_spell.id,
@@ -31,18 +30,27 @@ class SummonerMatchGroup < ApplicationRecord
         if self.roll_result.present? and not self.roll_result.frozen?
             self.roll_result.update(roll_data)
         else
-            RollResult.create!(roll_data)
+            new_roll = RollResult.create!(roll_data)
+            self.update(roll_result_id: new_roll.id)
         end
     end
 
-    private 
+    private
 
-        def roll_champ(is_jungler = false)
-            offset = rand(self.summoner.summoner_champions.count)
+        def roll_champ(is_jungler = false, mirror_with_summoner_match_group = nil)
+            champ_list = build_champ_list(self.summoner.summoner_champions,mirror_with_summoner_match_group.summoner.summoner_champions) if mirror_with_summoner_match_group.present?
 
-            summoner_champion = self.summoner.summoner_champions.offset(offset).first
+            offset = rand(champ_list.count)
+            summoner_champion = champ_list.offset(offset).first
 
             summoner_champion
+        end
+
+        def build_champ_list(champ_list,other_summoner_champions)
+            free_champion_ids = ServerRegion.where(region_code: self.match_group.region).first.free_champion_ids.split(',')
+            champ_ids = free_champion_ids + champ_list.pluck(:champion_id) + other_summoner_champions.pluck(:champion_id)
+            
+            Champion.where("id in (#{champ_ids.join(',')})")
         end
 
         def roll_champ_spell(champ)
