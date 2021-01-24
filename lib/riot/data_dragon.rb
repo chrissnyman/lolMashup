@@ -13,6 +13,7 @@ module Riot
             versions = get_latest_versions
 
             self.meta_version = versions[0]
+            "Current Meta Version: #{self.meta_version}"
         end
 
         def refresh_champion_list

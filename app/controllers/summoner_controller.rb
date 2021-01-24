@@ -7,11 +7,12 @@ class SummonerController < ApplicationController
 
     def overview
         if params[:region].present? and params[:summoner_name].present?
-            api_client = ::Riot::ApiClient.new
             @region = params[:region]
             @summoner_name = params[:summoner_name]
 
             @summoner = Summoner.load_summoner(@region,@summoner_name)
+            flash[:notice] =  {"title" => "Reload summmoner data", "message"=> "could not reload summoner data...", "class"=>"danger"} if @summoner.failed_to_reload == true
+
         end
     end
     

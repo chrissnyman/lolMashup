@@ -67,11 +67,15 @@ module Riot
             end
 
             def perform_call(endpoint,call_type,get_data = {}, post_data = {})
-                cur_url = "#{endpoint}?api_key=#{Rails.application.credentials.riot_api}"
+                cur_url = "#{endpoint}"
+                cur_url_params = ""
 
                 get_data.each do |key,val|
-                    cur_url +=  "&#{key}=#{val}"
+                    cur_url_params +=  "&" unless cur_url_params.blank?
+                    cur_url_params +=  "#{key}=#{val}"
                 end
+                cur_url = "#{endpoint}?#{cur_url_params}" unless cur_url_params.blank?
+
                 puts "perform_call #{call_type}: #{cur_url}"
 
                 response = false
@@ -79,15 +83,15 @@ module Riot
                     response = HTTParty.post(cur_url,
                         :body => post_data.to_json,
                         :headers => { 
-                            'Content-Type' => 'application/json'
-                            # 'Authorization' => 'Basic '+sage_authcode,
+                            'Content-Type' => 'application/json',
+                            "X-Riot-Token": "RGAPI-cab3b995-08e5-481b-a25a-57e7c515466c"
                         }
                     )
                 elsif call_type.downcase == 'get'
                     response = HTTParty.get(cur_url,
                         :headers => { 
-                            'Content-Type' => 'application/json'
-                            # 'Authorization' => 'Basic '+sage_authcode,
+                            'Content-Type' => 'application/json',
+                            "X-Riot-Token": "RGAPI-cab3b995-08e5-481b-a25a-57e7c515466c"
                         }
                     )
                 end
@@ -98,7 +102,7 @@ module Riot
                 if response.code == 200 or response.code == 201 or response.code == 204
                     return response.parsed_response
                 else
-                    puts 'Unexpected response ', response.code, response.message
+                    puts "Unexpected response, code: #{response.code}, message #{response.message}"
                     return false
                 end
             end
