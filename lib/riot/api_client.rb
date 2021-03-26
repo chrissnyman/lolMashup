@@ -75,7 +75,7 @@ module Riot
                     cur_url_params +=  "#{key}=#{val}"
                 end
                 cur_url = "#{endpoint}?#{cur_url_params}" unless cur_url_params.blank?
-
+                
                 puts "perform_call #{call_type}: #{cur_url}"
 
                 response = false
@@ -84,14 +84,14 @@ module Riot
                         :body => post_data.to_json,
                         :headers => { 
                             'Content-Type' => 'application/json',
-                            "X-Riot-Token": "RGAPI-cab3b995-08e5-481b-a25a-57e7c515466c"
+                            "X-Riot-Token": Rails.application.credentials[:riot_api]
                         }
                     )
                 elsif call_type.downcase == 'get'
                     response = HTTParty.get(cur_url,
                         :headers => { 
                             'Content-Type' => 'application/json',
-                            "X-Riot-Token": "RGAPI-cab3b995-08e5-481b-a25a-57e7c515466c"
+                            "X-Riot-Token": Rails.application.credentials[:riot_api]
                         }
                     )
                 end

@@ -14,7 +14,7 @@ class Summoner < ApplicationRecord
                 summoner = self.save_summoner(region, fresh_summoner_data) if fresh_summoner_data.present?
                 summoner.load_champion_masteries
             else
-                summoner.failed_to_reload = true
+                summoner.failed_to_reload = true if summoner.present?
             end
         end
         summoner
