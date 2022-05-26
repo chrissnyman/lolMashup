@@ -43,9 +43,9 @@ class RunePage
 
         secondary_slot_offset_a = rand(secondary_rune_tree.rune_slots.count-1) + 1
         secondary_slot_a = secondary_rune_tree.rune_slots.offset(secondary_slot_offset_a).first
-        secondary_slot_offset_b = rand(secondary_rune_tree.rune_slots.count)
+        secondary_slot_offset_b = rand(secondary_rune_tree.rune_slots.count-1) + 1
         while secondary_slot_offset_b == secondary_slot_offset_a do
-            secondary_slot_offset_b = rand(secondary_rune_tree.rune_slots.count)
+            secondary_slot_offset_b = rand(secondary_rune_tree.rune_slots.count-1) + 1
         end
         secondary_slot_b = secondary_rune_tree.rune_slots.offset(secondary_slot_offset_b).first
 
