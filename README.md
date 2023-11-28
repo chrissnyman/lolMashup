@@ -21,4 +21,7 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+Install Heroku-cli
+curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+
