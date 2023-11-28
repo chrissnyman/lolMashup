@@ -72,7 +72,7 @@ class SummonerMatchGroup < ApplicationRecord
                 jungle_item_list = Item.where(tags: '["LifeSteal", "SpellVamp", "Jungle"]')
                 offset = rand(jungle_item_list.count)
                 jungle_item = jungle_item_list.offset(offset).first
-                moola -= jungle_item.gold
+                moola -= jungle_item.gold unless jungle_item.gold.nil?
 
                 item_list << jungle_item.id
             end
@@ -84,7 +84,7 @@ class SummonerMatchGroup < ApplicationRecord
                 if starting_item_list.count > 0
                     offset = rand(starting_item_list.count)
                     starting_item = starting_item_list.offset(offset).first
-                    moola -= starting_item.gold
+                    moola -= starting_item.gold unless starting_item.gold.nil?
 
                     item_list << starting_item.id
                 else

@@ -6,10 +6,20 @@ class Summoner < ApplicationRecord
 
     attr_accessor :failed_to_reload
 
-    def self.load_summoner(region, summoner_name)
+    def self.load_summoner(region, summoner_name, force_refresh = false)
+        puts ""
+        puts "load_summoner"
+        puts ""
         summoner = Summoner.where(name:summoner_name, region: region).first
-        unless summoner.present? and summoner.updated_at > Time.now - 24.hour
+        if force_refresh == true or summoner.blank? or summoner.updated_at < Time.now - 24.hour
             fresh_summoner_data = ::Riot::ApiClient.new.get_summoner_data(region,summoner_name)
+            puts ""
+            puts ""
+            puts "fresh_summoner_data"
+            puts fresh_summoner_data
+            puts ""
+            puts ""
+            puts ""
             if fresh_summoner_data != false
                 summoner = self.save_summoner(region, fresh_summoner_data) if fresh_summoner_data.present?
                 summoner.load_champion_masteries

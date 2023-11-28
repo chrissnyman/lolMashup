@@ -6,12 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE lane_roles")
+LaneRole.delete_all
 LaneRole.create({name: 'Top'})
 LaneRole.create({name: 'Jungle'})
 LaneRole.create({name: 'Mid'})
 LaneRole.create({name: 'Bottom'})
 LaneRole.create({name: 'Support'})
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE server_regions")
+ServerRegion.delete_all
 ServerRegion.create(region_code:"EUN1", name: "EUN")
 ServerRegion.create(region_code:"EUW1", name: "EUW")
 ServerRegion.create(region_code:"JP1", name: "JP")
@@ -23,10 +27,14 @@ ServerRegion.create(region_code:"OC1", name: "OC")
 ServerRegion.create(region_code:"TR1", name: "TR")
 ServerRegion.create(region_code:"RU", name: "RU")
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE rules")
+Rule.delete_all
 Rule.create({name: 'player_count_5v5', check_val: 'player_count', check_calc: 'eq_or:5:10', required: true})
 Rule.create({name: 'player_count_min_2', check_val: 'player_count', check_calc: 'min:2', required: true})
 Rule.create({name: 'player_count_even', check_val: 'player_count', check_calc: 'mod:2:0', required: true})
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE game_modes")
+GameMode.delete_all
 GameMode.create({name: 'No Rules'})
 GameMode.create({name: 'Classic 5v5', rules: [
     Rule.where(name:'player_count_5v5').first,
@@ -47,6 +55,11 @@ GameMode.create({name: 'Mirrored (No Jungle)', rules:[
     Rule.where(name:'player_count_even').first,
 ]})
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE game_modes_rules")
+
+
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE stat_mods")
+StatMod.delete_all
 StatMod.create({name: 'Adaptive Force', icon: 'perk-images/StatMods/StatModsAdaptiveForceIcon.png', allowed_in_slot: "1,2"})
 StatMod.create({name: 'Armor', icon: 'perk-images/StatMods/StatModsArmorIcon.png', allowed_in_slot: "2,3"})
 StatMod.create({name: 'Attack Speed', icon: 'perk-images/StatMods/StatModsAttackSpeedIcon.png', allowed_in_slot: "1"})
@@ -54,6 +67,8 @@ StatMod.create({name: 'CDR Scaling', icon: 'perk-images/StatMods/StatModsCDRScal
 StatMod.create({name: 'Health Scaling', icon: 'perk-images/StatMods/StatModsHealthScalingIcon.png', allowed_in_slot: "3"})
 StatMod.create({name: 'Magic Resist', icon: 'perk-images/StatMods/StatModsMagicResIcon.png', allowed_in_slot: "2,3"})
 
+# ActiveRecord::Base.connection.execute("TRUNCATE TABLE win_conditions")
+WinCondition.delete_all
 WinCondition.create({title: 'Total Units Healed',                         description: 'Total Units Healed',                     condition_metric: 'totalUnitsHealed',                   metric_calc_type: 'desc'})
 WinCondition.create({title: 'Largest MultiKill',                          description: 'Largest MultiKill',                      condition_metric: 'largestMultiKill',                   metric_calc_type: 'desc'})
 WinCondition.create({title: 'Gold Earned',                                description: 'Gold Earned',                            condition_metric: 'goldEarned',                         metric_calc_type: 'desc'})

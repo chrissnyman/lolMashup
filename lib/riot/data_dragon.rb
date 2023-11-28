@@ -6,14 +6,12 @@ module Riot
         attr_accessor :meta_version
         
         def initialize(meta_version = nil)
-            self.meta_version = meta_version
+            check_latest_version unless meta_version.present?
         end
         
         def check_latest_version
             versions = get_latest_versions
-
             self.meta_version = versions[0]
-            "Current Meta Version: #{self.meta_version}"
         end
 
         def refresh_champion_list

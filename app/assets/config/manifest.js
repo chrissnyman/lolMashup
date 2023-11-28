@@ -1,2 +1,6 @@
 //= link_tree ../images
-//= link_directory ../stylesheets .css
+
+//= link application.css
+
+  //= link jquery.min.js
+  //= link application.js

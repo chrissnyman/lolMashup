@@ -5,7 +5,7 @@
             <div class='row'>
                 <div class='col-4'>
                     <a class='text-white' href="/summoner/<%= locals[:group].region %>/<%= locals[:summoner_match_group].summoner.name%>" target="_blank"  data-toggle="tooltip"  title="Click to view profile">
-                        <img class='profile-pp rounded-circle' src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= locals[:summoner_match_group].summoner.profile_icon_id %>.png">
+                        <img class='profile-pp rounded-circle' src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/profileicon/<%= locals[:summoner_match_group].summoner.profile_icon_id %>.png">
                         <span><%= locals[:summoner_match_group].summoner.name%></span>
                     </a>
                 </div>
@@ -20,11 +20,11 @@
                     <h4 class="lane-role text-center <%= locals[:summoner_match_group].team == 2 ? 'bg-danger' : 'bg-info' %>"><%= locals[:summoner_match_group].team == 1 ? locals[:summoner_match_group].match_group.team1_name : locals[:summoner_match_group].match_group.team2_name %>: <%= locals[:summoner_match_group].lane_role.try(:name)%></h4>
                     <div class="build-container">
                         <div class=' champ'>
-                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=locals[:summoner_match_group].roll_result.champion.imagename %>" class="img-fluid ">
+                            <img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/champion/<%=locals[:summoner_match_group].roll_result.champion.imagename %>" class="img-fluid ">
                             <span class='champ-name'><%= locals[:summoner_match_group].roll_result.champion.name%></span>
                         </div>
                         <div class='champ-spell' data-toggle="tooltip"  title="<%=locals[:summoner_match_group].roll_result.champion_spell.name %>">
-                            <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=locals[:summoner_match_group].roll_result.champion_spell.imagename %>" class="img-fluid border border-success">
+                            <img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/spell/<%=locals[:summoner_match_group].roll_result.champion_spell.imagename %>" class="img-fluid border border-success">
                             <span class="button-binding"><%= locals[:summoner_match_group].roll_result.champion_spell.button_binding %></span>
                         </div>
                         <div class="item-spell-section">
@@ -33,36 +33,36 @@
                                 <div class='first-buy-items border border-success' data-toggle="tooltip" style="width: <%= ((build_parts[0].split(',').count / 2.0).round * 21) +6 %>px">
                                     <% build_parts[0].split(',').each do |item_id| %>
                                         <% cur_item = Item.find(item_id) %>
-                                        <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/<%=cur_item.imagename %>" class="item-pp" data-toggle="tooltip"  title="<%=cur_item.name %>">
+                                        <img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/item/<%=cur_item.imagename %>" class="item-pp" data-toggle="tooltip"  title="<%=cur_item.name %>">
                                     <% end %>
                                 </div>
                                 <% build_parts[1].split(',').each do |item_id| %>
                                     <% cur_item = Item.find(item_id) %>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/item/<%=cur_item.imagename %>" class="item-pp <%= cur_item.rarity == 'Mythic' ? 'border border-primary' : 'border border-light' %>" data-toggle="tooltip"  title="<%=cur_item.name %>">
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/item/<%=cur_item.imagename %>" class="item-pp <%= cur_item.rarity == 'Mythic' ? 'border border-primary' : 'border border-light' %>" data-toggle="tooltip"  title="<%=cur_item.name %>">
                                 <% end %>
                             </div>
                             <div class='summoner-spell-list'>
                                 <% locals[:summoner_match_group].roll_result.summoner_spells.split(',').each do |spell_id| %>
                                     <% cur_spell = SummonerSpell.find(spell_id) %>
-                                    <img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/spell/<%=cur_spell.imagename %>" class="spell-pp border " data-toggle="tooltip"  title="<%=cur_spell.name %>">
+                                    <img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/spell/<%=cur_spell.imagename %>" class="spell-pp border " data-toggle="tooltip"  title="<%=cur_spell.name %>">
                                 <% end %>
                             </div>
                             <% cur_rune_page = RunePage.from_string(locals[:summoner_match_group].roll_result.rune_build) %>
                             <div class='rune-list'>
-                                <img src="<%= image_url(cur_rune_page.rune_page[:primary][:rune_tree].icon) %>" class="rune-pp rune-tree-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:primary][:rune_tree].name %>">
+                                <img src="https://ddragon.canisback.com/img/<%= cur_rune_page.rune_page[:primary][:rune_tree].icon %>" class="rune-pp rune-tree-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:primary][:rune_tree].name %>">
                                 <% cur_rune_page.rune_page[:primary][:runes].each do |cur_rune| %>
-                                    <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
+                                    <img src="https://ddragon.canisback.com/img/<%= cur_rune.icon %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
                                 <% end %>
-                                <img src="<%= image_url(cur_rune_page.rune_page[:secondary][:rune_tree].icon) %>" class="rune-pp rune-tree-pp rune-tree-secondary-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:secondary][:rune_tree].name %>">
+                                <img src="https://ddragon.canisback.com/img/<%= cur_rune_page.rune_page[:secondary][:rune_tree].icon %>" class="rune-pp rune-tree-pp rune-tree-secondary-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune_page.rune_page[:secondary][:rune_tree].name %>">
                                 <% cur_rune_page.rune_page[:secondary][:runes].each do |cur_rune| %>
-                                    <img src="<%= image_url(cur_rune.icon) %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
+                                    <img src="https://ddragon.canisback.com/img/<%= cur_rune.icon %>" class="rune-pp border border-secondary" data-toggle="tooltip"  title="<%=cur_rune.name %>">
                                 <% end %>
                                 <div class='stat-mods'>
                                     <% cur_rune_page.rune_page[:stat_mods].each_with_index do |cur_stat_mod,index| %>
                                     <% slot_name = 'Offense' %>
                                     <% slot_name = 'Flex' if index == 1 %>
                                     <% slot_name = 'Defense' if index == 2 %>
-                                        <img src="<%= image_url(cur_stat_mod.icon) %>" class="stat-mod-pp" data-toggle="tooltip"  title="<%= "#{slot_name}: #{cur_stat_mod.name}" %>">
+                                        <img src="https://ddragon.canisback.com/img/<%= cur_stat_mod.icon %>" class="stat-mod-pp" data-toggle="tooltip"  title="<%= "#{slot_name}: #{cur_stat_mod.name}" %>">
                                     <% end %>
                                 </div>
                             </div>

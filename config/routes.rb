@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'summoner/' => 'summoner#overview'
   post 'summoner/' => 'summoner#search'
   get 'summoner/:region/:summoner_name' => 'summoner#overview'
+  get 'summoner/:region/:summoner_name/refresh' => 'summoner#refresh'
 
   get 'group/list' => 'group#list'
   get 'group/new' => 'group#new'

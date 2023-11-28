@@ -37,14 +37,18 @@
         <hr>
         <% if @summoner.present? %>
             <div class="jumbotron">
-
                 <div class="row">
                     <div class="col-3">
-                        <img class="img-fluid" src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/<%= @summoner.profile_icon_id %>.png">
+                        <img class="img-fluid" src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/profileicon/<%= @summoner.profile_icon_id %>.png">
                     </div>
                     <div class="col-9">
                         <h3 class="display-3"><%= @summoner.name %></h3>
                         <p class="lead"><strong>Level</strong> <%= @summoner.summoner_level %></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <a class='btn btn-primary' href="./<%=@summoner.name%>/refresh" >Refresh</a>
                     </div>
                 </div>
             </div>
@@ -69,7 +73,7 @@
                 <tbody>
                     <% @summoner.summoner_champions.each do |champ_mast| %>
                         <tr>
-                            <td><img src="http://ddragon.leagueoflegends.com/cdn/11.1.1/img/champion/<%=champ_mast.champion.imagename%>" class="champ-pp "><span class='champ-name'><%= champ_mast.champion.name %></span></td>
+                            <td><img src="http://ddragon.leagueoflegends.com/cdn/<%=@current_meta_version%>/img/champion/<%=champ_mast.champion.imagename%>" class="champ-pp "><span class='champ-name'><%= champ_mast.champion.name %></span></td>
                             <td class='text-center'><%= champ_mast.mastery_level %></td>
                             <td class='text-center'><%= champ_mast.champion_points %></td>
                             <td class='text-center'><%= champ_mast.champion_points_since_last %></td>
